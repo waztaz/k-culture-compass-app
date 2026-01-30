@@ -1,3 +1,58 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hybe-insight",
+      "description": "Exterior view of the HYBE Insight building",
+      "imageUrl": "https://images.unsplash.com/photo-1619218070141-bcfeb8b93074?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtb2Rlcm4lMjBidWlsZGluZ3xlbnwwfHx8fDE3Njk3MjczNTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern building"
+    },
+    {
+      "id": "olive-young-myeongdong",
+      "description": "Brightly lit interior of an Olive Young store in Myeongdong",
+      "imageUrl": "https://images.unsplash.com/photo-1567585902972-53bd0b897bf3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjb3NtZXRpY3MlMjBzdG9yZXxlbnwwfHx8fDE3Njk3MzIyNTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cosmetics store"
+    },
+    {
+      "id": "music-korea",
+      "description": "Shelves full of K-Pop albums at Music Korea",
+      "imageUrl": "https://images.unsplash.com/photo-1649756993114-c47e4440b7f7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtdXNpYyUyMGFsYnVtc3xlbnwwfHx8fDE3Njk3MzIyNTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "music albums"
+    },
+    {
+      "id": "onion-cafe",
+      "description": "Industrial chic interior of Cafe Onion Anguk",
+      "imageUrl": "https://images.unsplash.com/photo-1588253137728-1e4dd0fe9a93?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjYWZlJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzY5NzIyNTY4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cafe interior"
+    },
+    {
+      "id": "banobagi-dermatology",
+      "description": "Clean and modern reception area of a dermatology clinic",
+      "imageUrl": "https://images.unsplash.com/photo-1631507623442-fee09e89c6a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjbGluaWMlMjByZWNlcHRpb258ZW58MHx8fHwxNzY5NjI2NDUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clinic reception"
+    },
+    {
+      "id": "kpop-news-1",
+      "description": "K-Pop group performing on stage with confetti",
+      "imageUrl": "https://images.unsplash.com/photo-1696569083014-ea89faf5c7ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxrcG9wJTIwY29uY2VydHxlbnwwfHx8fDE3Njk3MzIyNTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "kpop concert"
+    },
+    {
+      "id": "kpop-news-2",
+      "description": "Closeup of a K-Pop idol smiling",
+      "imageUrl": "https://images.unsplash.com/photo-1610131914242-9e1642e441fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwb3AlMjBzdGFyfGVufDB8fHx8MTc2OTYzNDcyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pop star"
+    },
+    {
+      "id": "kbeauty-trend-1",
+      "description": "A flat-lay of various K-Beauty products",
+      "imageUrl": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxiZWF1dHklMjBwcm9kdWN0c3xlbnwwfHx8fDE3Njk2MjkyMDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "beauty products"
+    },
+    {
+      "id": "kbeauty-trend-2",
+      "description": "Model with glass skin look",
+      "imageUrl": "https://images.unsplash.com/photo-1555820585-c5ae44394b79?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxza2luY2FyZSUyMG1vZGVsfGVufDB8fHx8MTc2OTczMjI1NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "skincare model"
+    }
+  ]
 }
