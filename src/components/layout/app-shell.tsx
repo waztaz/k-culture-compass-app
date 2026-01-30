@@ -16,7 +16,7 @@ import {
 import type { NavItem } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Logo } from '@/components/icons/logo';
 import { LanguageSwitcher } from './language-switcher';
 
@@ -86,14 +86,18 @@ function Header() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="flex flex-col">
+          <SheetHeader>
+            <SheetTitle className="text-left">
+                <Link
+                href="/"
+                className="flex items-center gap-2 text-lg font-semibold"
+                >
+                <Logo className="h-8 w-8" />
+                <span className="font-headline text-lg">K-Culture Compass</span>
+                </Link>
+            </SheetTitle>
+          </SheetHeader>
           <nav className="grid gap-2 text-lg font-medium">
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-lg font-semibold mb-4"
-            >
-              <Logo className="h-8 w-8" />
-              <span className="sr-only">K-Culture Compass</span>
-            </Link>
             {navItems.map((item) => (
               <Link
                 key={item.label}
