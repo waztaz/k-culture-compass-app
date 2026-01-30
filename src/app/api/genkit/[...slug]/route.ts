@@ -1,5 +1,3 @@
-'use server';
-
 import createNextApiHandler from '@genkit-ai/next';
 import { ai } from '@/ai/genkit';
 
