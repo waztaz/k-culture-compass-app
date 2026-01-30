@@ -21,7 +21,7 @@ export default async function TrendsPage() {
             title={item.title}
             excerpt={item.excerpt}
             image={item.image}
-            link="#" // In a real app, this would be /trends/[slug]
+            link={`/posts/${item.id}`}
           />
         ))}
       </div>

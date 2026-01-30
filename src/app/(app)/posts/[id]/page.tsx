@@ -34,7 +34,9 @@ export default async function PostPage({ params }: { params: { id: string } }) {
     notFound();
   }
 
-  const location = await getLocationById(post.locationId);
+  const location = post.locationId
+    ? await getLocationById(post.locationId)
+    : undefined;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -74,9 +76,12 @@ export default async function PostPage({ params }: { params: { id: string } }) {
 
         <PostContentClient originalContent={post.content} />
         
-        <Separator className="my-12" />
-
-        <ReviewsSection locationId={post.locationId} />
+        {post.locationId && (
+          <>
+            <Separator className="my-12" />
+            <ReviewsSection locationId={post.locationId} />
+          </>
+        )}
       </article>
     </div>
   );

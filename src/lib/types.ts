@@ -27,11 +27,14 @@ export interface Location {
   };
 }
 
+export type PostCategory = 'K-Pop News' | 'K-Beauty Trend' | 'Location Spotlight';
+
 export interface Post {
   id: string;
   title: string;
   content: string;
-  locationId: string;
+  category: PostCategory;
+  locationId?: string;
   createdAt: string;
   image: {
     url: string;

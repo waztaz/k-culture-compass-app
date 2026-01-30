@@ -21,7 +21,7 @@ export default async function NewsPage() {
             title={item.title}
             excerpt={item.excerpt}
             image={item.image}
-            link="#" // In a real app, this would be /news/[slug]
+            link={`/posts/${item.id}`}
           />
         ))}
       </div>
