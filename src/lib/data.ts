@@ -1,4 +1,4 @@
-import type { Location, Post, Review, PostCategory, Language, TranslatedContent } from './types';
+import type { Location, Post, PostCategory, Language } from './types';
 
 const locations: Location[] = [
   {
@@ -326,16 +326,6 @@ const posts: Post[] = [
   },
 ];
 
-
-const reviews: Review[] = [
-  { id: 'rev-1', locationId: 'loc-1', author: 'ARMY_Fan123', rating: 5, text: 'Amazing experience! A must-visit for any HYBE group fan.', createdAt: '2024-07-21T12:00:00Z' },
-  { id: 'rev-2', locationId: 'loc-1', author: 'SeoulExplorer', rating: 4, text: 'Really cool exhibits, but the gift shop line was too long.', createdAt: '2024-07-21T13:00:00Z' },
-  { id: 'rev-3', locationId: 'loc-2', author: 'BeautyGuru', rating: 5, text: 'Heaven for skincare lovers! I spent a fortune here.', createdAt: '2024-07-20T18:00:00Z' },
-  { id: 'rev-4', locationId: 'loc-4', author: 'Foodie_Kim', rating: 4, text: 'The Pandoro was delicious, but the place is so crowded.', createdAt: '2024-07-19T10:00:00Z' },
-  { id: 'rev-5', locationId: 'loc-5', author: 'Grace L.', rating: 5, text: 'Very professional and clean clinic. The staff were helpful and spoke English well.', createdAt: '2024-07-18T15:00:00Z' },
-  { id: 'rev-6', locationId: 'loc-1', author: 'KpopLover', rating: 3, text: 'it was okay. kinda boring. gift shop expensive.', createdAt: '2024-07-22T09:00:00Z' },
-];
-
 export const getLocations = async (): Promise<Location[]> => {
   return locations;
 };
@@ -350,10 +340,6 @@ export const getPosts = async (): Promise<Post[]> => {
 
 export const getPostById = async (id: string): Promise<Post | undefined> => {
   return posts.find((post) => post.id === id);
-};
-
-export const getReviewsByLocationId = async (locationId: string): Promise<Review[]> => {
-  return reviews.filter((review) => review.locationId === locationId);
 };
 
 export const getPostsByCategory = async (category: PostCategory) => {

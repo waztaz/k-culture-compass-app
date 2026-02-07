@@ -18,7 +18,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Loader2, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { suggestReviewImprovements } from '@/ai/flows/suggest-review-improvements';
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { Alert, AlertDescription } from '../ui/alert';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { useFirestore } from '@/firebase';
+import type { NewReview } from '@/lib/types';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
+import { useToast } from '@/hooks/use-toast';
+
 
 const formSchema = z.object({
   author: z.string().min(2, {
@@ -30,9 +37,11 @@ const formSchema = z.object({
   }),
 });
 
-export function ReviewForm() {
+export function ReviewForm({ locationId }: { locationId: string }) {
   const [isImproving, setIsImproving] = useState(false);
   const [improvementError, setImprovementError] = useState('');
+  const { toast } = useToast();
+  const firestore = useFirestore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,8 +69,30 @@ export function ReviewForm() {
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // In a real app, this would submit the review to a backend
-    console.log(values);
+    if (!firestore) return;
+
+    const reviewData: NewReview = {
+        ...values,
+        locationId,
+        createdAt: serverTimestamp(),
+    };
+
+    const reviewsCollection = collection(firestore, 'reviews');
+    
+    addDoc(reviewsCollection, reviewData)
+      .catch((serverError) => {
+        const permissionError = new FirestorePermissionError({
+            path: reviewsCollection.path,
+            operation: 'create',
+            requestResourceData: reviewData,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      });
+    
+    toast({
+        title: 'Review Submitted!',
+        description: 'Thank you for your feedback.',
+    });
     form.reset();
   }
 

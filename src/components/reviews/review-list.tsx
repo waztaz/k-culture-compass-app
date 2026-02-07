@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Star } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { Timestamp } from 'firebase/firestore';
 
 function Rating({ rating }: { rating: number }) {
   return (
@@ -45,7 +46,7 @@ export function ReviewList({ reviews }: { reviews: Review[] }) {
             </div>
             <div className="flex items-center gap-4">
               <span className="text-xs text-muted-foreground">
-                {formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
+                {review.createdAt ? formatDistanceToNow(review.createdAt.toDate(), { addSuffix: true }) : ''}
               </span>
               <Rating rating={review.rating} />
             </div>

@@ -1,3 +1,5 @@
+import type { Timestamp, FieldValue } from 'firebase/firestore';
+
 export type LocationCategory =
   | 'Pharmacy'
   | 'K-Pop Holy Lands'
@@ -58,7 +60,15 @@ export interface Review {
   author: string;
   rating: number;
   text: string;
-  createdAt: string;
+  createdAt: Timestamp;
+}
+
+export interface NewReview {
+  locationId: string;
+  author: string;
+  rating: number;
+  text: string;
+  createdAt: FieldValue;
 }
 
 export interface NavItem {
