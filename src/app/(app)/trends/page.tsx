@@ -1,5 +1,6 @@
 import { PostCard } from '@/components/posts/post-card';
 import { getTrendsFeed } from '@/lib/data';
+import { Language } from '@/lib/types';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,8 +8,13 @@ export const metadata: Metadata = {
   description: 'Discover the latest trends, tips, and products in K-Beauty.',
 };
 
-export default async function TrendsPage() {
-  const trendItems = await getTrendsFeed();
+export default async function TrendsPage({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const lang = (searchParams?.lang as Language) || 'en';
+  const trendItems = await getTrendsFeed(lang);
 
   return (
     <div>
@@ -21,7 +27,7 @@ export default async function TrendsPage() {
             title={item.title}
             excerpt={item.excerpt}
             image={item.image}
-            link={`/posts/${item.id}`}
+            link={`/posts/${item.id}?lang=${lang}`}
           />
         ))}
       </div>

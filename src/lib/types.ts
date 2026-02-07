@@ -29,10 +29,20 @@ export interface Location {
 
 export type PostCategory = 'K-Pop News' | 'K-Beauty Trend' | 'Location Spotlight';
 
+export type Language = 'en' | 'ch' | 'jp' | 'tw';
+
+export interface TranslatedContent {
+  en: string;
+  ch: string;
+  jp: string;
+  tw: string;
+}
+
 export interface Post {
   id: string;
-  title: string;
-  content: string;
+  title: TranslatedContent;
+  content: TranslatedContent;
+  excerpt: TranslatedContent;
   category: PostCategory;
   locationId?: string;
   createdAt: string;

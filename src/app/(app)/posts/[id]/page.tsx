@@ -5,15 +5,17 @@ import { Badge } from '@/components/ui/badge';
 import { MapPin } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ReviewsSection } from '@/components/reviews/reviews-section';
-import { PostContentClient } from '@/components/posts/post-content-client';
 import type { Metadata } from 'next';
+import { Language } from '@/lib/types';
 
 type Props = {
   params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const post = await getPostById(params.id);
+  const lang = (searchParams?.lang as Language) || 'en';
 
   if (!post) {
     return {
@@ -22,13 +24,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${post.title} | K-Culture Compass`,
-    description: post.content.substring(0, 150),
+    title: `${post.title[lang] || post.title.en} | K-Culture Compass`,
+    description: post.excerpt[lang] || post.excerpt.en,
   };
 }
 
-export default async function PostPage({ params }: { params: { id: string } }) {
+export default async function PostPage({ params, searchParams }: Props) {
   const post = await getPostById(params.id);
+  const lang = (searchParams?.lang as Language) || 'en';
 
   if (!post) {
     notFound();
@@ -37,6 +40,9 @@ export default async function PostPage({ params }: { params: { id: string } }) {
   const location = post.locationId
     ? await getLocationById(post.locationId)
     : undefined;
+
+  const postTitle = post.title[lang] || post.title.en;
+  const postContent = post.content[lang] || post.content.en;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -52,7 +58,7 @@ export default async function PostPage({ params }: { params: { id: string } }) {
             </div>
           )}
           <h1 className="text-4xl font-headline font-bold tracking-tight lg:text-5xl">
-            {post.title}
+            {postTitle}
           </h1>
           <p className="text-muted-foreground text-lg">
             Posted on {new Date(post.createdAt).toLocaleDateString('en-US', {
@@ -66,7 +72,7 @@ export default async function PostPage({ params }: { params: { id: string } }) {
         <div className="relative h-96 w-full rounded-xl overflow-hidden shadow-lg">
             <Image
                 src={post.image.url}
-                alt={post.title}
+                alt={postTitle}
                 fill
                 className="object-cover"
                 priority
@@ -74,7 +80,9 @@ export default async function PostPage({ params }: { params: { id: string } }) {
             />
         </div>
 
-        <PostContentClient originalContent={post.content} />
+        <p className="text-foreground/90 leading-loose whitespace-pre-wrap">
+          {postContent}
+        </p>
         
         {post.locationId && (
           <>
