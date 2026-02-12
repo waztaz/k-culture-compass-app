@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { collection, query, where, orderBy } from 'firebase/firestore';
+import { collection, query, orderBy } from 'firebase/firestore';
 import { useFirestore, useCollection } from '@/firebase';
 import { PostCard } from '@/components/posts/post-card';
 import { Language, Article } from '@/lib/types';
@@ -13,18 +13,24 @@ export default function NewsPage() {
   const searchParams = useSearchParams();
   const lang = (searchParams.get('lang') as Language) || 'en';
 
+  // Query all articles, ordered by date
   const articlesQuery = useMemo(() => {
     if (!firestore) return null;
     return query(
       collection(firestore, 'articles'),
-      where('category', '==', 'K-Pop News'),
       orderBy('createdAt', 'desc')
     );
   }, [firestore]);
 
-  const { data: articles, loading } = useCollection<Article>(articlesQuery, {
+  const { data: allArticles, loading } = useCollection<Article>(articlesQuery, {
     deps: [firestore],
   });
+
+  // Filter articles on the client-side
+  const articles = useMemo(() => {
+    if (!allArticles) return [];
+    return allArticles.filter((article) => article.category === 'K-Pop News');
+  }, [allArticles]);
 
   return (
     <div>
@@ -47,6 +53,9 @@ export default function NewsPage() {
             link={`/posts/${item.id}?lang=${lang}`}
           />
         ))}
+         {!loading && articles?.length === 0 && (
+           <p className="text-center text-muted-foreground py-8 col-span-full">No news articles found.</p>
+        )}
       </div>
     </div>
   );
