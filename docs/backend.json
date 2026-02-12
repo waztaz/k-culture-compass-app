@@ -221,7 +221,8 @@
   },
   "auth": {
     "providers": [
-      "emailLink"
+      "emailLink",
+      "google.com"
     ]
   },
   "firestore": {
