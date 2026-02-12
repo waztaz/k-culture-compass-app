@@ -101,7 +101,12 @@ export default function FinishLoginPage() {
           // Redirect to the map page after successful login
           router.push('/map');
         } catch (e: any) {
-          setError(`Login failed: ${e.message}`);
+          if (e.code === 'auth/unauthorized-continue-uri') {
+              const domain = new URL(window.location.href).hostname;
+              setError(`This sign-in link is not authorized for this domain (${domain}). Please go to your Firebase project's Authentication settings and add this domain to the 'Authorized domains' list.`);
+          } else {
+            setError(`Login failed: ${e.message}`);
+          }
           setStatus('Failed');
         }
       } else {
