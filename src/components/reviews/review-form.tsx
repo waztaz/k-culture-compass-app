@@ -184,7 +184,7 @@ export function ReviewForm({ locationId }: { locationId: string }) {
         </Form>
       </CardContent>
     </Card>
-    <AuthDialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen} onSuccess={() => form.handleSubmit(onSubmit)()} />
+    <AuthDialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen} />
     </>
   );
 }

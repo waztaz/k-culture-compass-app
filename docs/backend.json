@@ -216,7 +216,7 @@
   },
   "auth": {
     "providers": [
-      "email"
+      "emailLink"
     ]
   },
   "firestore": {

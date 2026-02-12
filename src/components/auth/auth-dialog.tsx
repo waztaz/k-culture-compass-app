@@ -7,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -21,221 +20,117 @@ import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-} from 'firebase/auth';
+import { sendSignInLinkToEmail } from 'firebase/auth';
 import { useAuth } from '@/firebase';
 import { useState } from 'react';
-import { Alert, AlertDescription } from '../ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { doc, setDoc, GeoPoint } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError } from '@/firebase/errors';
+import { Loader2 } from 'lucide-react';
 
-
-const signUpSchema = z.object({
-  displayName: z.string().min(2, 'Name must be at least 2 characters.'),
+const emailSchema = z.object({
   email: z.string().email('Invalid email address.'),
-  password: z.string().min(6, 'Password must be at least 6 characters.'),
-});
-
-const loginSchema = z.object({
-  email: z.string().email('Invalid email address.'),
-  password: z.string().min(6, 'Password must be at least 6 characters.'),
 });
 
 interface AuthDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess?: () => void;
 }
 
-export function AuthDialog({ open, onOpenChange, onSuccess }: AuthDialogProps) {
+export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
   const auth = useAuth();
-  const firestore = useFirestore();
   const [error, setError] = useState<string | null>(null);
+  const [isLinkSent, setIsLinkSent] = useState(false);
   const { toast } = useToast();
-  
-  const signUpForm = useForm<z.infer<typeof signUpSchema>>({
-    resolver: zodResolver(signUpSchema),
-    defaultValues: { displayName: '', email: '', password: '' },
+
+  const form = useForm<z.infer<typeof emailSchema>>({
+    resolver: zodResolver(emailSchema),
+    defaultValues: { email: '' },
   });
 
-  const loginForm = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
-  });
-
-  const handleSignUp = async (values: z.infer<typeof signUpSchema>) => {
+  const handleSendLink = async (values: z.infer<typeof emailSchema>) => {
     setError(null);
+    setIsLinkSent(false);
+    
+    // Construct the URL for the finish login page
+    const actionCodeSettings = {
+      url: `${window.location.origin}/finish-login`,
+      handleCodeInApp: true,
+    };
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        values.email,
-        values.password
-      );
-      await updateProfile(userCredential.user, {
-        displayName: values.displayName,
+      await sendSignInLinkToEmail(auth, values.email, actionCodeSettings);
+      // Save the email locally so we can retrieve it on the finish page
+      window.localStorage.setItem('emailForSignIn', values.email);
+      setIsLinkSent(true);
+      toast({
+        title: 'Check your email',
+        description: 'A sign-in link has been sent to your email address.',
       });
-
-      const locationPromise = new Promise<GeolocationPosition | null>((resolve) => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => resolve(position),
-            () => resolve(null) // On error or denial, resolve with null
-          );
-        } else {
-          resolve(null);
-        }
-      });
-
-      const location = await locationPromise;
-
-      if (firestore) {
-        const userRef = doc(firestore, 'users', userCredential.user.uid);
-        const userData: {
-            displayName: string;
-            email: string;
-            location?: GeoPoint;
-        } = {
-            displayName: values.displayName,
-            email: values.email,
-        };
-
-        if (location) {
-            userData.location = new GeoPoint(location.coords.latitude, location.coords.longitude);
-        }
-        
-        setDoc(userRef, userData)
-          .catch((serverError) => {
-            const permissionError = new FirestorePermissionError({
-                path: userRef.path,
-                operation: 'create',
-                requestResourceData: userData,
-            });
-            errorEmitter.emit('permission-error', permissionError);
-          });
-      }
-      
-      toast({ title: 'Account created!', description: "You're now logged in." });
-      onOpenChange(false);
-      onSuccess?.();
     } catch (e: any) {
       setError(e.message);
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: e.message || 'Could not send login link.',
+      });
     }
   };
 
-  const handleLogin = async (values: z.infer<typeof loginSchema>) => {
-    setError(null);
-    try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
-      toast({ title: 'Logged in!', description: "Welcome back." });
-      onOpenChange(false);
-      onSuccess?.();
-    } catch (e: any) {
-      setError(e.message);
+  const handleOpenChange = (isOpen: boolean) => {
+    onOpenChange(isOpen);
+    if (!isOpen) {
+      // Reset state when dialog is closed
+      setTimeout(() => {
+        form.reset();
+        setError(null);
+        setIsLinkSent(false);
+      }, 500);
     }
-  };
+  }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Authentication Required</DialogTitle>
+          <DialogTitle>Login or Sign Up</DialogTitle>
           <DialogDescription>
-            You need to be logged in to post a review.
+            Enter your email to receive a secure, password-free login link.
           </DialogDescription>
         </DialogHeader>
-        <Tabs defaultValue="login" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Log In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
-          </TabsList>
-          <TabsContent value="login">
-            <Form {...loginForm}>
-              <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4 pt-4">
-                {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
-                <FormField
-                  control={loginForm.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="you@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={loginForm.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input type="password" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" className="w-full">Log In</Button>
-              </form>
-            </Form>
-          </TabsContent>
-          <TabsContent value="signup">
-            <Form {...signUpForm}>
-              <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-4 pt-4">
-                {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
-                <FormField
-                    control={signUpForm.control}
-                    name="displayName"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                            <Input placeholder="Jane Doe" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                  control={signUpForm.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="you@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={signUpForm.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input type="password" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" className="w-full">Sign Up</Button>
-              </form>
-            </Form>
-          </TabsContent>
-        </Tabs>
+        
+        {isLinkSent ? (
+          <div className='py-8 text-center'>
+            <Alert>
+              <AlertTitle>Magic Link Sent!</AlertTitle>
+              <AlertDescription>
+                Please check your inbox for an email from us. Click the link inside to log in. You can close this window.
+              </AlertDescription>
+            </Alert>
+          </div>
+        ) : (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSendLink)} className="space-y-4 pt-4">
+              {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="you@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Send Login Link
+              </Button>
+            </form>
+          </Form>
+        )}
       </DialogContent>
     </Dialog>
   );
