@@ -24,6 +24,8 @@ import { Logo } from '@/components/icons/logo';
 import { LanguageSwitcher } from './language-switcher';
 import { UserNav } from '@/components/auth/user-nav';
 import { useUser } from '@/firebase';
+import { Suspense } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const navItems: NavItem[] = [
   { href: '/map', label: 'Map', icon: MapIcon },
@@ -133,7 +135,9 @@ function Header() {
             </Link>
           </Button>
         )}
-        <LanguageSwitcher />
+        <Suspense fallback={<Skeleton className="h-10 w-10" />}>
+          <LanguageSwitcher />
+        </Suspense>
         <UserNav />
       </div>
     </header>
