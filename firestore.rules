@@ -10,7 +10,10 @@ service cloud.firestore {
     
     match /users/{userId} {
       allow read: if true;
-      allow create: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId &&
+                  request.resource.data.displayName is string &&
+                  request.resource.data.email is string &&
+                  (!('location' in request.resource.data) || request.resource.data.location is latlng);
       allow update: if request.auth != null && request.auth.uid == userId;
       allow delete: if false;
     }

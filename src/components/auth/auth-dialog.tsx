@@ -30,7 +30,7 @@ import { useAuth } from '@/firebase';
 import { useState } from 'react';
 import { Alert, AlertDescription } from '../ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, GeoPoint } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
@@ -81,12 +81,34 @@ export function AuthDialog({ open, onOpenChange, onSuccess }: AuthDialogProps) {
         displayName: values.displayName,
       });
 
+      const locationPromise = new Promise<GeolocationPosition | null>((resolve) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => resolve(position),
+            () => resolve(null) // On error or denial, resolve with null
+          );
+        } else {
+          resolve(null);
+        }
+      });
+
+      const location = await locationPromise;
+
       if (firestore) {
         const userRef = doc(firestore, 'users', userCredential.user.uid);
-        const userData = {
+        const userData: {
+            displayName: string;
+            email: string;
+            location?: GeoPoint;
+        } = {
             displayName: values.displayName,
             email: values.email,
         };
+
+        if (location) {
+            userData.location = new GeoPoint(location.coords.latitude, location.coords.longitude);
+        }
+        
         setDoc(userRef, userData)
           .catch((serverError) => {
             const permissionError = new FirestorePermissionError({

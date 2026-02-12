@@ -10,12 +10,27 @@
           "description": "The user's display name."
         },
         "email": {
-            "type": "string",
-            "format": "email",
-            "description": "The user's email address."
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "location": {
+          "type": "object",
+          "description": "The user's geographical location.",
+          "properties": {
+            "latitude": {
+              "type": "number"
+            },
+            "longitude": {
+              "type": "number"
+            }
+          }
         }
       },
-      "required": ["displayName", "email"]
+      "required": [
+        "displayName",
+        "email"
+      ]
     },
     "Review": {
       "title": "Review",
@@ -27,8 +42,8 @@
           "description": "The ID of the location being reviewed."
         },
         "userId": {
-            "type": "string",
-            "description": "The ID of the user who created the review."
+          "type": "string",
+          "description": "The ID of the user who created the review."
         },
         "author": {
           "type": "string",
@@ -48,19 +63,32 @@
           "description": "The timestamp when the review was created."
         }
       },
-      "required": ["locationId", "userId", "author", "rating", "text", "createdAt"]
+      "required": [
+        "locationId",
+        "userId",
+        "author",
+        "rating",
+        "text",
+        "createdAt"
+      ]
     }
   },
   "auth": {
-    "providers": ["email"]
+    "providers": [
+      "email"
+    ]
   },
   "firestore": {
     "/reviews/{reviewId}": {
-      "schema": { "$ref": "#/entities/Review" },
+      "schema": {
+        "$ref": "#/entities/Review"
+      },
       "description": "Collection of user reviews."
     },
     "/users/{userId}": {
-      "schema": { "$ref": "#/entities/UserProfile" },
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
       "description": "User profile information."
     }
   }
