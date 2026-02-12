@@ -57,6 +57,7 @@ export interface Post {
 export interface Review {
   id: string;
   locationId: string;
+  userId: string;
   author: string;
   rating: number;
   text: string;
@@ -65,6 +66,7 @@ export interface Review {
 
 export interface NewReview {
   locationId: string;
+  userId: string;
   author: string;
   rating: number;
   text: string;

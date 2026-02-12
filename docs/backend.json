@@ -1,5 +1,22 @@
 {
   "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Represents a user's public profile.",
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The user's email address."
+        }
+      },
+      "required": ["displayName", "email"]
+    },
     "Review": {
       "title": "Review",
       "description": "A user review for a location.",
@@ -8,6 +25,10 @@
         "locationId": {
           "type": "string",
           "description": "The ID of the location being reviewed."
+        },
+        "userId": {
+            "type": "string",
+            "description": "The ID of the user who created the review."
         },
         "author": {
           "type": "string",
@@ -27,16 +48,20 @@
           "description": "The timestamp when the review was created."
         }
       },
-      "required": ["locationId", "author", "rating", "text", "createdAt"]
+      "required": ["locationId", "userId", "author", "rating", "text", "createdAt"]
     }
   },
   "auth": {
-    "providers": []
+    "providers": ["email"]
   },
   "firestore": {
     "/reviews/{reviewId}": {
       "schema": { "$ref": "#/entities/Review" },
       "description": "Collection of user reviews."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile information."
     }
   }
 }

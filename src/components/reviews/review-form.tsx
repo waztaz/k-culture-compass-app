@@ -16,16 +16,16 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Loader2, Sparkles } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { suggestReviewImprovements } from '@/ai/flows/suggest-review-improvements';
 import { Alert, AlertDescription } from '../ui/alert';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useUser } from '@/firebase';
 import type { NewReview } from '@/lib/types';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 import { useToast } from '@/hooks/use-toast';
-
+import { AuthDialog } from '../auth/auth-dialog';
 
 const formSchema = z.object({
   author: z.string().min(2, {
@@ -40,8 +40,10 @@ const formSchema = z.object({
 export function ReviewForm({ locationId }: { locationId: string }) {
   const [isImproving, setIsImproving] = useState(false);
   const [improvementError, setImprovementError] = useState('');
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
   const { toast } = useToast();
   const firestore = useFirestore();
+  const user = useUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,6 +53,14 @@ export function ReviewForm({ locationId }: { locationId: string }) {
       text: '',
     },
   });
+
+  useEffect(() => {
+    if (user) {
+        form.setValue('author', user.displayName || '');
+    } else {
+        form.reset({ author: '', rating: 5, text: form.getValues('text')});
+    }
+  }, [user, form]);
   
   const handleImproveReview = async () => {
     const reviewText = form.getValues('text');
@@ -69,11 +79,16 @@ export function ReviewForm({ locationId }: { locationId: string }) {
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!user) {
+        setIsAuthDialogOpen(true);
+        return;
+    }
     if (!firestore) return;
 
     const reviewData: NewReview = {
         ...values,
         locationId,
+        userId: user.uid,
         createdAt: serverTimestamp(),
     };
 
@@ -93,10 +108,17 @@ export function ReviewForm({ locationId }: { locationId: string }) {
         title: 'Review Submitted!',
         description: 'Thank you for your feedback.',
     });
-    form.reset();
+    form.reset({
+        author: user.displayName || '',
+        rating: 5,
+        text: ''
+    });
   }
 
+  const submitButtonText = user ? 'Submit Review' : 'Login to Submit';
+
   return (
+    <>
     <Card>
       <CardHeader>
         <CardTitle className="font-headline">Leave a Review</CardTitle>
@@ -112,7 +134,7 @@ export function ReviewForm({ locationId }: { locationId: string }) {
                     <FormItem>
                     <FormLabel>Your Name</FormLabel>
                     <FormControl>
-                        <Input placeholder="e.g. Jane Doe" {...field} />
+                        <Input placeholder="e.g. Jane Doe" {...field} disabled={!!user} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
@@ -156,11 +178,13 @@ export function ReviewForm({ locationId }: { locationId: string }) {
                     {isImproving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
                     Improve with AI
                 </Button>
-                <Button type="submit" className="bg-primary hover:bg-primary/90">Submit Review</Button>
+                <Button type="submit" className="bg-primary hover:bg-primary/90">{submitButtonText}</Button>
             </div>
           </form>
         </Form>
       </CardContent>
     </Card>
+    <AuthDialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen} onSuccess={() => form.handleSubmit(onSubmit)()} />
+    </>
   );
 }

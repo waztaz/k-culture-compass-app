@@ -3,15 +3,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  HeartPulse,
-  Landmark,
-  LayoutDashboard,
   Map as MapIcon,
   Menu,
   Newspaper,
-  ShoppingBag,
   Sparkles,
-  Coffee
 } from 'lucide-react';
 import type { NavItem } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -19,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Logo } from '@/components/icons/logo';
 import { LanguageSwitcher } from './language-switcher';
+import { UserNav } from '@/components/auth/user-nav';
 
 const navItems: NavItem[] = [
   { href: '/map', label: 'Map', icon: MapIcon },
@@ -117,7 +113,10 @@ function Header() {
       <div className="w-full flex-1">
         {/* Can add breadcrumbs or search here */}
       </div>
-      <LanguageSwitcher />
+      <div className="flex items-center gap-4">
+        <LanguageSwitcher />
+        <UserNav />
+      </div>
     </header>
   );
 }
