@@ -2,13 +2,13 @@ import type { Article } from './types';
 import { Timestamp } from 'firebase/firestore';
 import { PlaceHolderImages } from './placeholder-images';
 
+const kpopNews1Image = PlaceHolderImages.find(p => p.id === 'kpop-news-1')!;
+const kpopNews2Image = PlaceHolderImages.find(p => p.id === 'kpop-news-2')!;
 const kpopNews3Image = PlaceHolderImages.find(p => p.id === 'kpop-news-3')!;
-const kpopNews4Image = PlaceHolderImages.find(p => p.id === 'kpop-news-4')!;
-const kpopNews5Image = PlaceHolderImages.find(p => p.id === 'kpop-news-5')!;
 
+const kbeautyTrend1Image = PlaceHolderImages.find(p => p.id === 'kbeauty-trend-1')!;
+const kbeautyTrend2Image = PlaceHolderImages.find(p => p.id === 'kbeauty-trend-2')!;
 const kbeautyTrend3Image = PlaceHolderImages.find(p => p.id === 'kbeauty-trend-3')!;
-const kbeautyTrend4Image = PlaceHolderImages.find(p => p.id === 'kbeauty-trend-4')!;
-const kbeautyTrend5Image = PlaceHolderImages.find(p => p.id === 'kbeauty-trend-5')!;
 
 export const seedArticles: Article[] = [
   {
@@ -32,7 +32,7 @@ export const seedArticles: Article[] = [
       jp: 'K-POPスーパースター「スターライト」が、待望のワールドツアー「夢の銀河」を公式に発表し、世界中に興奮の波紋を広げています。ツアーはソウルを皮切りに、ロサンゼルス、ロンドン、東京などの主要都市を巡ります。パワフルなパフォーマンスと魅力的なボーカルで知られるこのグループは、全く新しいセットリストと息をのむようなステージプロダクションを約束しています。愛情を込めて「セレスティアルズ」として知られる彼らのグローバルなファンベースは、すでにソーシャルメディアで興奮を表明しており、チケットは数分で完売すると予想されています。',
       tw: 'K-Pop超級巨星「Starlight」正式宣布了他們備受期待的世界巡演「夢想的銀河」，此舉在全球範圍內引起了興奮的漣漪。巡演將在首爾拉開帷幕，然後前往洛杉磯、倫敦和東京等主要城市。該組合以其強大的表演和迷人的歌聲而聞名，承諾將帶來全新的曲目列表和驚人的舞台製作。他們被親切地稱為「Celestials」的全球粉絲群已經在社交媒體上表達了他們的興奮之情，門票預計將在幾分鐘内售罄。',
     },
-    image: { url: kpopNews3Image.imageUrl, hint: kpopNews3Image.imageHint },
+    image: { url: kpopNews1Image.imageUrl, hint: kpopNews1Image.imageHint },
     createdAt: new Timestamp(Math.floor(new Date('2024-07-29T10:00:00Z').getTime() / 1000), 0),
   },
   {
@@ -56,7 +56,7 @@ export const seedArticles: Article[] = [
       jp: 'K-POP業界は、世界を席巻した新しいガールズグループ「LUNA」の登場で沸いています。彼女たちのデビューアルバム「ファーストライト」は、リリース初週で50万枚以上を売り上げるという驚異的なマイルストーンを達成し、デビューアルバムの新記録を樹立しました。グループのタイトルトラック「ムーンビーム」も、国内外の主要な音楽チャートでトップに立っています。ファンは彼女たちの新鮮なコンセプト、シンクロした振り付け、そして力強いボーカル能力を称賛し、彼女たちをK-POPの次の大きな存在として歓迎しています。',
       tw: 'K-Pop業界因新女子組合「LUNA」的到來而沸騰，她們已經席捲了全世界。她們的首張專輯《First Light》取得了顯著的里程碑，在發行第一周內銷量超過五十萬張——這是首張專輯的新紀錄。該組合的主打歌《Moonbeam》也登上了國內外主要音樂排行榜的榜首。粉絲們讚揚她們清新的概念、同步的舞蹈和強大的演唱能力，預示她們將成為K-Pop的下一個大事件。',
     },
-    image: { url: kpopNews4Image.imageUrl, hint: kpopNews4Image.imageHint },
+    image: { url: kpopNews2Image.imageUrl, hint: kpopNews2Image.imageHint },
     createdAt: new Timestamp(Math.floor(new Date('2024-07-28T09:00:00Z').getTime() / 1000), 0),
   },
   {
@@ -80,7 +80,7 @@ export const seedArticles: Article[] = [
       jp: "ソロアーティストJ.Minは、最新シングル「Eclipse」で音楽シーンに見事なカムバックを果たしました。この曲は、魅力的なミュージックビデオを備えたムーディーなR&Bトラックで、世界中のストリーミングプラットフォームを席巻しています。記録破りの72時間で1億ストリーミングを達成し、J.Minは世界的な影響力を持つアーティストとしての地位を固めました。ファンは、アーティストの成熟したサウンドと芸術的な進化を称賛しています。このカムバックには、叙情的な深さと制作品質で批評家から絶賛されている新しいミニアルバム「Shadows & Light」も含まれています。",
       tw: "Solo歌手J.Min攜最新單曲'Eclipse'驚豔回歸音樂界。這首歌曲是一首憂鬱的R&B曲目，配有引人入勝的音樂視頻，在全球流媒體平台上佔據主導地位。在創紀錄的72小時內達到1億流媒體播放量，J.Min鞏固了自己作為全球力量的地位。粉絲們讚揚這位藝人成熟的聲音和藝術上的進化。這次回歸還包括一張新的迷你專輯'Shadows & Light'，該專輯因其抒情的深度和製作質量而備受好評。",
     },
-    image: { url: kpopNews5Image.imageUrl, hint: kpopNews5Image.imageHint },
+    image: { url: kpopNews3Image.imageUrl, hint: kpopNews3Image.imageHint },
     createdAt: new Timestamp(Math.floor(new Date('2024-07-25T11:00:00Z').getTime() / 1000), 0),
   },
   {
@@ -104,7 +104,7 @@ export const seedArticles: Article[] = [
       jp: '「グラススキン」への探求は、美容界を席巻し続けています。このKビューティーのトレンドは、まるでガラスのように非常に滑らかで、毛穴がなく、輝くような肌を手に入れることを指します。それは単一の製品ではなく、深い水分補給と穏やかな角質除去に焦点を当てた多段階のスキンケアレジメンです。重要なステップには、ダブルクレンジング、保湿トナーの使用、ヒアルロン酸やナイアシンアミドなどの成分が詰まったエッセンスやセラムの塗布、そして栄養価の高い保湿剤で全てを閉じ込めることが含まれます。その結果、メイクではなく内側から来る健康的で輝くような輝きが生まれます。',
       tw: '對「玻璃肌」的追求繼續主導著美容界。這一K-Beauty潮流指的是獲得一種異常光滑、無毛孔、光彩照人的膚色，就像一塊玻璃。這並非關乎單一產品，而是一個多步驟的護膚方案，專注於深層補水和溫和去角質。關鍵步驟包括雙重清潔，使用保濕爽膚水，塗抹富含透明質酸和菸鹼醯胺等成分的精華液，並用滋養保濕霜鎖住所有水分。其結果是一種由內而外散發的健康、容光煥發的光澤，而非來自化妝。',
     },
-    image: { url: kbeautyTrend3Image.imageUrl, hint: kbeautyTrend3Image.imageHint },
+    image: { url: kbeautyTrend1Image.imageUrl, hint: kbeautyTrend1Image.imageHint },
     createdAt: new Timestamp(Math.floor(new Date('2024-07-27T12:00:00Z').getTime() / 1000), 0),
   },
   {
@@ -128,7 +128,7 @@ export const seedArticles: Article[] = [
       jp: '発酵は食品だけのものではありません。それは、成分を強化するKビューティーにおける変革的なプロセスです。発酵中、微生物は分子をより小さく、より強力な形に分解し、肌が吸収しやすくなります。このプロセスは、抗酸化物質とアミノ酸の濃度を高め、水分の向上、肌の質感の改善、そして肌バリアの強化につながります。人気のある発酵成分には、米水、大豆、および様々な植物が含まれます。ブランドは、これらの強力な成分を配合物にますます取り入れており、目に見える結果をもたらす製品を提供しています。',
       tw: '發酵不僅用於食品；它在K-Beauty中是一個能增強成分功效的變革過程。在發酵過程中，微生物將分子分解成更小、更有效的形式，使皮膚更容易吸收。這個過程可以增加抗氧化劑和氨基酸的濃度，從而增強保濕、改善皮膚質地和加強皮膚屏障。流行的發酵成分包括米水、大豆和各種植物。品牌越來越多地將這些強大成分融入其配方中，提供能帶來顯著效果的產品。',
     },
-    image: { url: kbeautyTrend4Image.imageUrl, hint: kbeautyTrend4Image.imageHint },
+    image: { url: kbeautyTrend2Image.imageUrl, hint: kbeautyTrend2Image.imageHint },
     createdAt: new Timestamp(Math.floor(new Date('2024-07-26T15:00:00Z').getTime() / 1000), 0),
   },
   {
@@ -152,7 +152,7 @@ export const seedArticles: Article[] = [
       jp: "日焼け止めがスキンケアの交渉の余地のないステップになるにつれて、Kビューティーブランドはこれまで以上にそれを容易にするために革新しています。サンスクリーンスティックの登場です。これは、ツイストアップチューブに入った固形のバーム状のフォーミュラです。これらのスティックは、その携帯性と使いやすさで賞賛されており、メイクの上からでも汚れることなく、迅速かつ衛生的に再塗布できます。肌に優しい成分で処方され、広域スペクトルの保護を提供するこれらは、世界中の美容愛好家にとってハンドバッグの必需品になりつつあります。マットな仕上がりから露のような輝きまで、あらゆる肌タイプに対応するサンスティックがあります。",
       tw: "隨著防曬成為護膚中越來越不可或缺的一步，K-Beauty品牌正在創新，使其比以往任何時候都更容易。進入防曬棒的世界：一種固體的、類似香膏的配方，裝在旋出式管中。這些防曬棒因其便攜性和易用性而備受讚譽，可以快速、衛生地在妝容上重新塗抹，而不會弄髒。它們配方中含有對皮膚有益的成分，並提供廣譜保護，正在成為各地美容愛好者的手袋必備品。從啞光效果到水潤光澤，總有一款適合各種膚質的防曬棒。",
     },
-    image: { url: kbeautyTrend5Image.imageUrl, hint: kbeautyTrend5Image.imageHint },
+    image: { url: kbeautyTrend3Image.imageUrl, hint: kbeautyTrend3Image.imageHint },
     createdAt: new Timestamp(Math.floor(new Date('2024-07-24T14:00:00Z').getTime() / 1000), 0),
   },
 ];
