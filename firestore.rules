@@ -25,7 +25,7 @@ service cloud.firestore {
     }
 
     match /articles/{articleId} {
-      allow read: if true;
+      allow get, list: if true;
       allow create, update, delete: if false; // Only admins should write articles
 
       match /comments/{commentId} {

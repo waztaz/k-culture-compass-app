@@ -1,19 +1,17 @@
 'use client';
 
 import { useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { collection, query, where, orderBy } from 'firebase/firestore';
 import { useFirestore, useCollection } from '@/firebase';
 import { PostCard } from '@/components/posts/post-card';
 import { Language, Article } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function NewsPage({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+export default function NewsPage() {
   const firestore = useFirestore();
-  const lang = (searchParams?.lang as Language) || 'en';
+  const searchParams = useSearchParams();
+  const lang = (searchParams.get('lang') as Language) || 'en';
 
   const articlesQuery = useMemo(() => {
     if (!firestore) return null;

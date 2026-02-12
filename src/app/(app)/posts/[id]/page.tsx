@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { doc } from 'firebase/firestore';
 import { useDoc, useFirestore } from '@/firebase';
 import { getLocationById } from '@/lib/data';
@@ -15,13 +16,13 @@ import { CommentsSection } from '@/components/comments/comments-section';
 
 type Props = {
   params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
 };
 
-export default function PostPage({ params, searchParams }: Props) {
+export default function PostPage({ params }: Props) {
   const articleId = params.id;
   const firestore = useFirestore();
-  const lang = (searchParams?.lang as Language) || 'en';
+  const searchParams = useSearchParams();
+  const lang = (searchParams.get('lang') as Language) || 'en';
   const [location, setLocation] = useState<Location | undefined>(undefined);
 
   const articleRef = useMemo(() => {
