@@ -80,6 +80,7 @@ export interface UserPost {
   title: string;
   content: string;
   createdAt: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 export interface NewUserPost {
