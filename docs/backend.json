@@ -106,6 +106,112 @@
         "content",
         "createdAt"
       ]
+    },
+    "Article": {
+      "title": "Article",
+      "description": "A curated content piece like news, trends, or location spotlights.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "$ref": "#/entities/TranslatedContent"
+        },
+        "content": {
+          "$ref": "#/entities/TranslatedContent"
+        },
+        "excerpt": {
+          "$ref": "#/entities/TranslatedContent"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "K-Pop News",
+            "K-Beauty Trend",
+            "Location Spotlight"
+          ]
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "image": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "hint": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url",
+            "hint"
+          ]
+        }
+      },
+      "required": [
+        "title",
+        "content",
+        "excerpt",
+        "category",
+        "createdAt",
+        "image"
+      ]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "A user comment on an article.",
+      "type": "object",
+      "properties": {
+        "articleId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "articleId",
+        "userId",
+        "author",
+        "text",
+        "createdAt"
+      ]
+    },
+    "TranslatedContent": {
+      "title": "Translated Content",
+      "description": "Content translated into multiple languages.",
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "ch": {
+          "type": "string"
+        },
+        "jp": {
+          "type": "string"
+        },
+        "tw": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "en"
+      ]
     }
   },
   "auth": {
@@ -131,6 +237,18 @@
         "$ref": "#/entities/UserPost"
       },
       "description": "Collection of user-generated blog posts."
+    },
+    "/articles/{articleId}": {
+      "schema": {
+        "$ref": "#/entities/Article"
+      },
+      "description": "Collection of curated articles."
+    },
+    "/articles/{articleId}/comments/{commentId}": {
+      "schema": {
+        "$ref": "#/entities/Comment"
+      },
+      "description": "Sub-collection of comments for a specific article."
     }
   }
 }

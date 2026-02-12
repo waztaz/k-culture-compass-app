@@ -1,31 +1,50 @@
+'use client';
+
+import { useMemo } from 'react';
+import { collection, query, where, orderBy } from 'firebase/firestore';
+import { useFirestore, useCollection } from '@/firebase';
 import { PostCard } from '@/components/posts/post-card';
-import { getNewsFeed } from '@/lib/data';
-import { Language } from '@/lib/types';
-import type { Metadata } from 'next';
+import { Language, Article } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export const metadata: Metadata = {
-  title: 'K-Pop News | K-Culture Compass',
-  description: 'The latest news and updates from the world of K-Pop.',
-};
-
-export default async function NewsPage({
+export default function NewsPage({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+  const firestore = useFirestore();
   const lang = (searchParams?.lang as Language) || 'en';
-  const newsItems = await getNewsFeed(lang);
+
+  const articlesQuery = useMemo(() => {
+    if (!firestore) return null;
+    return query(
+      collection(firestore, 'articles'),
+      where('category', '==', 'K-Pop News'),
+      orderBy('createdAt', 'desc')
+    );
+  }, [firestore]);
+
+  const { data: articles, loading } = useCollection<Article>(articlesQuery, {
+    deps: [firestore],
+  });
 
   return (
     <div>
       <h1 className="text-3xl font-headline font-bold mb-6">K-Pop News</h1>
+      {loading && (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Skeleton className="h-80 w-full" />
+          <Skeleton className="h-80 w-full" />
+          <Skeleton className="h-80 w-full" />
+        </div>
+      )}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {newsItems.map((item) => (
+        {!loading && articles && articles.map((item) => (
           <PostCard
             key={item.id}
             id={item.id}
-            title={item.title}
-            excerpt={item.excerpt}
+            title={item.title[lang] || item.title.en}
+            excerpt={item.excerpt[lang] || item.excerpt.en}
             image={item.image}
             link={`/posts/${item.id}?lang=${lang}`}
           />

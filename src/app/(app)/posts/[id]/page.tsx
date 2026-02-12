@@ -1,48 +1,79 @@
-import { getPostById, getLocationById } from '@/lib/data';
-import { notFound } from 'next/navigation';
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+import { doc } from 'firebase/firestore';
+import { useDoc, useFirestore } from '@/firebase';
+import { getLocationById } from '@/lib/data';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { MapPin } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ReviewsSection } from '@/components/reviews/reviews-section';
-import type { Metadata } from 'next';
-import { Language } from '@/lib/types';
+import type { Language, Article, Location } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
+import { CommentsSection } from '@/components/comments/comments-section';
 
 type Props = {
   params: { id: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 
-export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
-  const post = await getPostById(params.id);
+export default function PostPage({ params, searchParams }: Props) {
+  const articleId = params.id;
+  const firestore = useFirestore();
   const lang = (searchParams?.lang as Language) || 'en';
+  const [location, setLocation] = useState<Location | undefined>(undefined);
 
-  if (!post) {
-    return {
-      title: 'Post Not Found',
-    };
+  const articleRef = useMemo(() => {
+    if (!firestore || !articleId) return null;
+    return doc(firestore, 'articles', articleId);
+  }, [firestore, articleId]);
+
+  const { data: article, loading } = useDoc<Article>(articleRef, {
+    deps: [firestore, articleId],
+  });
+
+  useEffect(() => {
+    if (article) {
+      document.title = `${
+        article.title[lang] || article.title.en
+      } | K-Culture Compass`;
+      if (article.locationId) {
+        getLocationById(article.locationId).then(setLocation);
+      }
+    }
+  }, [article, lang]);
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="space-y-4">
+          <Skeleton className="h-8 w-1/4" />
+          <Skeleton className="h-12 w-3/4" />
+          <Skeleton className="h-6 w-1/2" />
+        </div>
+        <Skeleton className="h-96 w-full" />
+        <div className="space-y-4">
+          <Skeleton className="h-6 w-full" />
+          <Skeleton className="h-6 w-full" />
+          <Skeleton className="h-6 w-5/6" />
+        </div>
+      </div>
+    );
   }
 
-  return {
-    title: `${post.title[lang] || post.title.en} | K-Culture Compass`,
-    description: post.excerpt[lang] || post.excerpt.en,
-  };
-}
-
-export default async function PostPage({ params, searchParams }: Props) {
-  const post = await getPostById(params.id);
-  const lang = (searchParams?.lang as Language) || 'en';
-
-  if (!post) {
-    notFound();
+  if (!article) {
+    return (
+      <div className="text-center py-10">
+        <h1 className="text-2xl font-bold">Article not found</h1>
+        <p className="text-muted-foreground">This article may have been removed.</p>
+      </div>
+    );
   }
 
-  const location = post.locationId
-    ? await getLocationById(post.locationId)
-    : undefined;
-
-  const postTitle = post.title[lang] || post.title.en;
-  const postContent = post.content[lang] || post.content.en;
+  const postTitle = article.title[lang] || article.title.en;
+  const postContent = article.content[lang] || article.content.en;
+  const postDate = article.createdAt.toDate();
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -61,33 +92,37 @@ export default async function PostPage({ params, searchParams }: Props) {
             {postTitle}
           </h1>
           <p className="text-muted-foreground text-lg">
-            Posted on {new Date(post.createdAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
+            Posted on{' '}
+            {postDate.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
             })}
           </p>
         </div>
-        
+
         <div className="relative h-96 w-full rounded-xl overflow-hidden shadow-lg">
-            <Image
-                src={post.image.url}
-                alt={postTitle}
-                fill
-                className="object-cover"
-                priority
-                data-ai-hint={post.image.hint}
-            />
+          <Image
+            src={article.image.url}
+            alt={postTitle}
+            fill
+            className="object-cover"
+            priority
+            data-ai-hint={article.image.hint}
+          />
         </div>
 
         <p className="text-foreground/90 leading-loose whitespace-pre-wrap">
           {postContent}
         </p>
-        
-        {post.locationId && (
+
+        <Separator className="my-12" />
+        <CommentsSection articleId={articleId} />
+
+        {article.locationId && (
           <>
             <Separator className="my-12" />
-            <ReviewsSection locationId={post.locationId} />
+            <ReviewsSection locationId={article.locationId} />
           </>
         )}
       </article>

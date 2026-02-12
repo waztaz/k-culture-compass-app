@@ -29,7 +29,7 @@ export interface Location {
   };
 }
 
-export type PostCategory = 'K-Pop News' | 'K-Beauty Trend' | 'Location Spotlight';
+export type ArticleCategory = 'K-Pop News' | 'K-Beauty Trend' | 'Location Spotlight';
 
 export type Language = 'en' | 'ch' | 'jp' | 'tw';
 
@@ -40,14 +40,14 @@ export interface TranslatedContent {
   tw: string;
 }
 
-export interface Post {
+export interface Article {
   id: string;
   title: TranslatedContent;
   content: TranslatedContent;
   excerpt: TranslatedContent;
-  category: PostCategory;
+  category: ArticleCategory;
   locationId?: string;
-  createdAt: string;
+  createdAt: Timestamp;
   image: {
     url: string;
     hint: string;
@@ -87,6 +87,23 @@ export interface NewUserPost {
   author: string;
   title: string;
   content: string;
+  createdAt: FieldValue;
+}
+
+export interface Comment {
+  id: string;
+  articleId: string;
+  userId: string;
+  author: string;
+  text: string;
+  createdAt: Timestamp;
+}
+
+export interface NewComment {
+  articleId: string;
+  userId: string;
+  author: string;
+  text: string;
   createdAt: FieldValue;
 }
 
