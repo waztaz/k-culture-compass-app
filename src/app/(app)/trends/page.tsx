@@ -7,13 +7,13 @@ import { useFirestore, useCollection } from '@/firebase';
 import { PostCard } from '@/components/posts/post-card';
 import { Language, Article } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { seedArticles } from '@/lib/articles-seed-data';
 
 export default function TrendsPage() {
   const firestore = useFirestore();
   const searchParams = useSearchParams();
   const lang = (searchParams.get('lang') as Language) || 'en';
 
-  // Query all articles, ordered by date
   const articlesQuery = useMemo(() => {
     if (!firestore) return null;
     return query(
@@ -22,15 +22,25 @@ export default function TrendsPage() {
     );
   }, [firestore]);
 
-  const { data: allArticles, loading } = useCollection<Article>(articlesQuery, {
+  const { data: allArticlesFromDb, loading } = useCollection<Article>(articlesQuery, {
     deps: [firestore],
   });
 
-  // Filter articles on the client-side
+  const allArticles = useMemo(() => {
+    if (allArticlesFromDb && allArticlesFromDb.length > 0) {
+      return allArticlesFromDb;
+    }
+    if (!loading && (!allArticlesFromDb || allArticlesFromDb.length === 0)) {
+        return seedArticles;
+    }
+    return [];
+  }, [allArticlesFromDb, loading]);
+
   const articles = useMemo(() => {
     if (!allArticles) return [];
     return allArticles.filter((article) => article.category === 'K-Beauty Trend');
   }, [allArticles]);
+
 
   return (
     <div>

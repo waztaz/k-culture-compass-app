@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { doc } from 'firebase/firestore';
+import { doc, Timestamp } from 'firebase/firestore';
 import { useDoc, useFirestore } from '@/firebase';
 import { getLocationById } from '@/lib/data';
 import Image from 'next/image';
@@ -13,6 +13,7 @@ import { ReviewsSection } from '@/components/reviews/reviews-section';
 import type { Language, Article, Location } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CommentsSection } from '@/components/comments/comments-section';
+import { seedArticles } from '@/lib/articles-seed-data';
 
 type Props = {
   params: { id: string };
@@ -30,9 +31,19 @@ export default function PostPage({ params }: Props) {
     return doc(firestore, 'articles', articleId);
   }, [firestore, articleId]);
 
-  const { data: article, loading } = useDoc<Article>(articleRef, {
+  const { data: articleFromDb, loading } = useDoc<Article>(articleRef, {
     deps: [firestore, articleId],
   });
+
+  const article = useMemo(() => {
+    if (articleFromDb) return articleFromDb;
+    if (!loading && !articleFromDb) {
+      const seedArticle = seedArticles.find(a => a.id === articleId);
+      return seedArticle ? { ...seedArticle, id: seedArticle.id } : null;
+    }
+    return null;
+  }, [articleFromDb, loading, articleId]);
+  
 
   useEffect(() => {
     if (article) {
@@ -45,7 +56,7 @@ export default function PostPage({ params }: Props) {
     }
   }, [article, lang]);
 
-  if (loading) {
+  if (loading && !article) {
     return (
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="space-y-4">
@@ -74,7 +85,15 @@ export default function PostPage({ params }: Props) {
 
   const postTitle = article.title[lang] || article.title.en;
   const postContent = article.content[lang] || article.content.en;
-  const postDate = article.createdAt.toDate();
+  
+  const getPostDate = () => {
+    if (article.createdAt instanceof Timestamp) {
+      return article.createdAt.toDate();
+    }
+    // This handles the case where createdAt might be a Date object from seed data
+    return new Date(article.createdAt.seconds * 1000);
+  }
+  const postDate = getPostDate();
 
   return (
     <div className="max-w-4xl mx-auto">

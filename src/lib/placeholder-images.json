@@ -43,6 +43,18 @@
       "imageHint": "pop star"
     },
     {
+      "id": "kpop-news-3",
+      "description": "A popular K-Pop group strikes a pose on a vibrant, futuristic stage.",
+      "imageUrl": "https://images.unsplash.com/photo-1599423300932-a5311c6c4491?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxrJTIwcG9wJTIwZ3JvdXB8ZW58MHx8fHwxNzcwMjQwODg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "kpop group"
+    },
+    {
+      "id": "kpop-news-4",
+      "description": "An energetic crowd of fans waves light sticks at a packed K-Pop concert.",
+      "imageUrl": "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmYW5zJTIwY2hlZXJpbmd8ZW58MHx8fHwxNzcwMjQwODg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fans cheering"
+    },
+    {
       "id": "kbeauty-trend-1",
       "description": "A flat-lay of various K-Beauty products",
       "imageUrl": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxiZWF1dHklMjBwcm9kdWN0c3xlbnwwfHx8fDE3Njk2MjkyMDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -53,6 +65,18 @@
       "description": "Model with glass skin look",
       "imageUrl": "https://images.unsplash.com/photo-1555820585-c5ae44394b79?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxza2luY2FyZSUyMG1vZGVsfGVufDB8fHx8MTc2OTczMjI1NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "skincare model"
+    },
+    {
+      "id": "kbeauty-trend-3",
+      "description": "A vibrant and colorful makeup palette with various shades.",
+      "imageUrl": "https://images.unsplash.com/photo-1583244248880-36e609f08558?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYWtldXAlMjBwYWxldHRlfGVufDB8fHx8MTc3MDI0MDg4NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "makeup palette"
+    },
+    {
+      "id": "kbeauty-trend-4",
+      "description": "A close-up of a model's face, showcasing a radiant, 'glowing skin' look.",
+      "imageUrl": "https://images.unsplash.com/photo-1611782352253-b09a4b373e5f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnbG93aW5nJTIwc2tpbnxlbnwwfHx8fDE3NzAyNDA4ODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "glowing skin"
     }
   ]
 }
