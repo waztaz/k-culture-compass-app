@@ -71,6 +71,41 @@
         "text",
         "createdAt"
       ]
+    },
+    "UserPost": {
+      "title": "User Post",
+      "description": "A blog post created by a user.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who created the post."
+        },
+        "author": {
+          "type": "string",
+          "description": "The display name of the post's author."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the post."
+        },
+        "content": {
+          "type": "string",
+          "description": "The main content of the post in Markdown or plain text."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the post was created."
+        }
+      },
+      "required": [
+        "userId",
+        "author",
+        "title",
+        "content",
+        "createdAt"
+      ]
     }
   },
   "auth": {
@@ -90,6 +125,12 @@
         "$ref": "#/entities/UserProfile"
       },
       "description": "User profile information."
+    },
+    "/user-posts/{userPostId}": {
+      "schema": {
+        "$ref": "#/entities/UserPost"
+      },
+      "description": "Collection of user-generated blog posts."
     }
   }
 }

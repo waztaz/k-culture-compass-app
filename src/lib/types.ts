@@ -73,6 +73,23 @@ export interface NewReview {
   createdAt: FieldValue;
 }
 
+export interface UserPost {
+  id: string;
+  userId: string;
+  author: string;
+  title: string;
+  content: string;
+  createdAt: Timestamp;
+}
+
+export interface NewUserPost {
+  userId: string;
+  author: string;
+  title: string;
+  content: string;
+  createdAt: FieldValue;
+}
+
 export interface NavItem {
   href: string;
   label: string;

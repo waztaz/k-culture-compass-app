@@ -6,20 +6,30 @@ import {
   Map as MapIcon,
   Menu,
   Newspaper,
+  PlusCircle,
   Sparkles,
+  Users,
 } from 'lucide-react';
 import type { NavItem } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { Logo } from '@/components/icons/logo';
 import { LanguageSwitcher } from './language-switcher';
 import { UserNav } from '@/components/auth/user-nav';
+import { useUser } from '@/firebase';
 
 const navItems: NavItem[] = [
   { href: '/map', label: 'Map', icon: MapIcon },
   { href: '/news', label: 'K-Pop News', icon: Newspaper },
   { href: '/trends', label: 'K-Beauty Trends', icon: Sparkles },
+  { href: '/community', label: 'Community', icon: Users },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -72,6 +82,7 @@ function Sidebar() {
 
 function Header() {
   const pathname = usePathname();
+  const user = useUser();
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
       <Sheet>
@@ -84,13 +95,13 @@ function Header() {
         <SheetContent side="left" className="flex flex-col">
           <SheetHeader>
             <SheetTitle className="text-left">
-                <Link
+              <Link
                 href="/"
                 className="flex items-center gap-2 text-lg font-semibold"
-                >
+              >
                 <Logo className="h-8 w-8" />
                 <span className="font-headline text-lg">K-Culture Compass</span>
-                </Link>
+              </Link>
             </SheetTitle>
           </SheetHeader>
           <nav className="grid gap-2 text-lg font-medium">
@@ -114,6 +125,14 @@ function Header() {
         {/* Can add breadcrumbs or search here */}
       </div>
       <div className="flex items-center gap-4">
+        {user && (
+          <Button asChild size="sm">
+            <Link href="/create-post">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Create Post
+            </Link>
+          </Button>
+        )}
         <LanguageSwitcher />
         <UserNav />
       </div>
