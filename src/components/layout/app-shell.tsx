@@ -26,7 +26,7 @@ import { Logo } from '@/components/icons/logo';
 import { LanguageSwitcher } from './language-switcher';
 import { UserNav } from '@/components/auth/user-nav';
 import { useUser } from '@/firebase';
-import { Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const navItems: NavItem[] = [
@@ -92,37 +92,55 @@ function Sidebar() {
   );
 }
 
-function Header() {
+function MobileNav() {
   const pathname = usePathname();
-  const user = useUser();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return (
+      <Button
+        variant="outline"
+        size="icon"
+        className="shrink-0 md:hidden"
+        disabled
+      >
+        <Menu className="h-5 w-5" />
+        <span className="sr-only">Toggle navigation menu</span>
+      </Button>
+    );
+  }
+
   return (
-    <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="shrink-0 md:hidden">
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle navigation menu</span>
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="flex flex-col">
-          <SheetHeader>
-            <SheetTitle className="text-left">
-              <Link
-                href="/"
-                className="flex items-center gap-2 text-lg font-semibold"
-              >
-                <Logo className="h-8 w-8" />
-                <span className="font-headline text-lg">K-Culture Compass</span>
-              </Link>
-            </SheetTitle>
-          </SheetHeader>
-          <nav className="grid gap-2 text-lg font-medium">
-            {navItems.map((item) => {
-               const isActive =
-               item.href === '/home'
-                 ? pathname === item.href
-                 : pathname.startsWith(item.href);
-              return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle navigation menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="flex flex-col">
+        <SheetHeader>
+          <SheetTitle className="text-left">
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-lg font-semibold"
+            >
+              <Logo className="h-8 w-8" />
+              <span className="font-headline text-lg">K-Culture Compass</span>
+            </Link>
+          </SheetTitle>
+        </SheetHeader>
+        <nav className="grid gap-2 text-lg font-medium">
+          {navItems.map((item) => {
+            const isActive =
+              item.href === '/home'
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
+            return (
               <Link
                 key={item.label}
                 href={item.href}
@@ -134,10 +152,19 @@ function Header() {
                 <item.icon className="h-5 w-5" />
                 {item.label}
               </Link>
-            )})}
-          </nav>
-        </SheetContent>
-      </Sheet>
+            );
+          })}
+        </nav>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+function Header() {
+  const user = useUser();
+  return (
+    <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+      <MobileNav />
       <div className="w-full flex-1">
         {/* Can add breadcrumbs or search here */}
       </div>
