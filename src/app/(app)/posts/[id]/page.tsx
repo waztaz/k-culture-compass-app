@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams, useParams } from 'next/navigation';
-import { doc, Timestamp } from 'firebase/firestore';
+import { doc } from 'firebase/firestore';
 import { useDoc, useFirestore } from '@/firebase';
 import { getLocationById } from '@/lib/data';
 import Image from 'next/image';
@@ -13,7 +13,6 @@ import { ReviewsSection } from '@/components/reviews/reviews-section';
 import type { Language, Article, Location } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CommentsSection } from '@/components/comments/comments-section';
-import { seedArticles } from '@/lib/articles-seed-data';
 
 export default function PostPage() {
   const params = useParams();
@@ -28,18 +27,9 @@ export default function PostPage() {
     return doc(firestore, 'articles', articleId);
   }, [firestore, articleId]);
 
-  const { data: articleFromDb, loading } = useDoc<Article>(articleRef, {
+  const { data: article, loading } = useDoc<Article>(articleRef, {
     deps: [firestore, articleId],
   });
-
-  const article = useMemo(() => {
-    if (articleFromDb) return articleFromDb;
-    if (!loading && !articleFromDb) {
-      const seedArticle = seedArticles.find(a => a.id === articleId);
-      return seedArticle ? { ...seedArticle, id: seedArticle.id } : null;
-    }
-    return null;
-  }, [articleFromDb, loading, articleId]);
   
 
   useEffect(() => {
@@ -82,15 +72,7 @@ export default function PostPage() {
 
   const postTitle = article.title[lang] || article.title.en;
   const postContent = article.content[lang] || article.content.en;
-  
-  const getPostDate = () => {
-    if (article.createdAt instanceof Timestamp) {
-      return article.createdAt.toDate();
-    }
-    // This handles the case where createdAt might be a Date object from seed data
-    return new Date(article.createdAt.seconds * 1000);
-  }
-  const postDate = getPostDate();
+  const postDate = article.createdAt.toDate();
 
   return (
     <div className="max-w-4xl mx-auto">

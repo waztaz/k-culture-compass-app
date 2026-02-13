@@ -7,7 +7,6 @@ import { useFirestore, useCollection } from '@/firebase';
 import { PostCard } from '@/components/posts/post-card';
 import { Language, Article } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
-import { seedArticles } from '@/lib/articles-seed-data';
 
 export default function BeautyList() {
   const firestore = useFirestore();
@@ -27,14 +26,11 @@ export default function BeautyList() {
   });
 
   const allArticles = useMemo(() => {
-    if (allArticlesFromDb && allArticlesFromDb.length > 0) {
+    if (allArticlesFromDb) {
       return [...allArticlesFromDb].reverse();
     }
-    if (!loading && (!allArticlesFromDb || allArticlesFromDb.length === 0)) {
-        return seedArticles.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
-    }
     return [];
-  }, [allArticlesFromDb, loading]);
+  }, [allArticlesFromDb]);
 
   const articles = useMemo(() => {
     if (!allArticles) return [];
