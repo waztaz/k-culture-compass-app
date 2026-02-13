@@ -89,6 +89,36 @@
       "description": "Serum bottle with dropper",
       "imageUrl": "https://images.unsplash.com/photo-1629198725830-a1a73d3a8a47?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzZXJ1bSUyMGJvdHRsZXxlbnwwfHx8fDE3NzAyNDIzMjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "serum bottle"
+    },
+    {
+      "id": "loc-spotlight-1",
+      "description": "Modern, white, spacious museum interior with high ceilings.",
+      "imageUrl": "https://images.unsplash.com/photo-1582555162443-fe7548c7a659?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "modern museum"
+    },
+    {
+      "id": "loc-spotlight-2",
+      "description": "Brightly lit aisle in a cosmetics store with products on shelves.",
+      "imageUrl": "https://images.unsplash.com/photo-1599948123864-8cd03017a514?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "cosmetics aisle"
+    },
+    {
+      "id": "loc-spotlight-3",
+      "description": "A wall covered in colorful K-pop albums and merchandise.",
+      "imageUrl": "https://images.unsplash.com/photo-1628998822062-793466189a24?q=80&w=1932&auto=format&fit=crop",
+      "imageHint": "album store"
+    },
+    {
+      "id": "loc-spotlight-4",
+      "description": "A traditional Korean hanok building converted into a modern cafe.",
+      "imageUrl": "https://images.unsplash.com/photo-1621037346851-a1787c8855b8?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "hanok cafe"
+    },
+    {
+      "id": "loc-spotlight-5",
+      "description": "A minimalist and clean reception area of a modern clinic.",
+      "imageUrl": "https://images.unsplash.com/photo-1666214278381-c99f5b02534c?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "clinic interior"
     }
   ]
 }

@@ -10,7 +10,14 @@ const kbeautyTrend1Image = PlaceHolderImages.find(p => p.id === 'kbeauty-trend-1
 const kbeautyTrend2Image = PlaceHolderImages.find(p => p.id === 'kbeauty-trend-2')!;
 const kbeautyTrend3Image = PlaceHolderImages.find(p => p.id === 'kbeauty-trend-3')!;
 
+const locSpotlight1Image = PlaceHolderImages.find(p => p.id === 'loc-spotlight-1')!;
+const locSpotlight2Image = PlaceHolderImages.find(p => p.id === 'loc-spotlight-2')!;
+const locSpotlight3Image = PlaceHolderImages.find(p => p.id === 'loc-spotlight-3')!;
+const locSpotlight4Image = PlaceHolderImages.find(p => p.id === 'loc-spotlight-4')!;
+const locSpotlight5Image = PlaceHolderImages.find(p => p.id === 'loc-spotlight-5')!;
+
 export const seedArticles: Article[] = [
+  // K-Pop News
   {
     id: 'seed-kpop-1',
     category: 'K-Pop News',
@@ -83,6 +90,8 @@ export const seedArticles: Article[] = [
     image: { url: kpopNews3Image.imageUrl, hint: kpopNews3Image.imageHint },
     createdAt: new Timestamp(Math.floor(new Date('2024-07-25T11:00:00Z').getTime() / 1000), 0),
   },
+
+  // K-Beauty Trends
   {
     id: 'seed-kbeauty-1',
     category: 'K-Beauty Trend',
@@ -155,4 +164,131 @@ export const seedArticles: Article[] = [
     image: { url: kbeautyTrend3Image.imageUrl, hint: kbeautyTrend3Image.imageHint },
     createdAt: new Timestamp(Math.floor(new Date('2024-07-24T14:00:00Z').getTime() / 1000), 0),
   },
+
+  // Location Spotlights
+  {
+    id: 'post-1',
+    category: 'Location Spotlight',
+    locationId: 'loc-1',
+    title: {
+      en: 'HYBE INSIGHT: A Deep Dive into the Heart of K-Pop',
+      ch: 'HYBE INSIGHT：深入K-Pop的心脏',
+      jp: 'HYBE INSIGHT：K-POPの中心への深いダイブ',
+      tw: 'HYBE INSIGHT：深入K-Pop的心臟',
+    },
+    excerpt: {
+      en: 'Explore the immersive museum dedicated to the artists and music of HYBE, the powerhouse behind BTS and other global acts.',
+      ch: '探索致力于HYBE艺术家和音乐的沉浸式博物馆，HYBE是BTS等全球知名艺人背后的强大公司。',
+      jp: 'BTSや他のグローバルなアーティストを支えるHYBEのアーティストと音楽に捧げられた没入型ミュージアムを探検してください。',
+      tw: '探索致力於HYBE藝術家和音樂的沉浸式博物館，HYBE是BTS等全球知名藝人背後的強大公司。',
+    },
+    content: {
+      en: 'Located in the heart of Seoul, HYBE INSIGHT is more than just a museum; it\'s a pilgrimage site for K-Pop fans. The space offers a multi-sensory experience, allowing visitors to see, hear, and even feel the music of HYBE\'s artists. From exclusive behind-the-scenes footage to interactive exhibits and artist-used equipment, it provides an unparalleled look into the world of K-Pop production. A must-visit for any fan looking to understand the artistry and dedication behind their favorite groups.',
+      ch: 'HYBE INSIGHT位于首尔市中心，不仅仅是一个博物馆，更是K-Pop粉丝的朝圣地。这个空间提供多感官体验，让游客可以看到、听到甚至感受到HYBE艺术家的音乐。从独家的幕后花絮到互动展览和艺人使用过的设备，它为K-Pop制作世界提供了无与伦比的视角。对于任何希望了解自己喜爱团体背后的艺术性和奉献精神的粉丝来说，这里是必游之地。',
+      jp: 'ソウルの中心部に位置するHYBE INSIGHTは、単なる博物館ではありません。K-POPファンの巡礼地です。このスペースは、訪問者がHYBEのアーティストの音楽を見たり、聞いたり、感じたりできる多感覚体験を提供します。独占的な舞台裏の映像からインタラクティブな展示、アーティストが使用した機材まで、K-POP制作の世界を比類のない視点から見ることができます。お気に入りのグループの背後にある芸術性と献身を理解したいファンにとって、必見の場所です。',
+      tw: 'HYBE INSIGHT位於首爾市中心，不僅僅是一個博物館，更是K-Pop粉絲的朝聖地。這個空間提供多感官體驗，讓遊客可以看到、聽到甚至感受到HYBE藝人的音樂。從獨家的幕後花絮到互動展覽和藝人使用過的設備，它為K-Pop製作世界提供了無與倫比的視角。對於任何希望了解自己喜愛團體背後的藝術性和奉獻精神的粉絲來說，這裡是必遊之地。',
+    },
+    image: { url: locSpotlight1Image.imageUrl, hint: locSpotlight1Image.imageHint },
+    createdAt: new Timestamp(Math.floor(new Date('2024-07-23T10:00:00Z').getTime() / 1000), 0),
+  },
+  {
+    id: 'post-2',
+    category: 'Location Spotlight',
+    locationId: 'loc-2',
+    title: {
+      en: 'Olive Young Myeongdong: A K-Beauty Paradise',
+      ch: 'Olive Young 明洞：K-Beauty天堂',
+      jp: 'オリーブヤング明洞：Kビューティーの楽園',
+      tw: 'Olive Young 明洞：K-Beauty天堂',
+    },
+    excerpt: {
+      en: 'The flagship store of Korea\'s most famous health and beauty retailer is a must-visit for any skincare or makeup enthusiast.',
+      ch: '韩国最著名的健康与美容零售商的旗舰店是任何护肤或化妆爱好者的必游之地。',
+      jp: '韓国で最も有名な健康・美容小売店の旗艦店は、スキンケアやメイクアップの愛好家なら必見です。',
+      tw: '韓國最著名的健康與美容零售商的旗艦店是任何護膚或化妝愛好者的必遊之地。',
+    },
+    content: {
+      en: 'Step into the Olive Young flagship store in Myeongdong and you\'ll find yourself in a world of endless beauty possibilities. Spread across multiple floors, this store stocks an extensive range of K-beauty products, from cult-favorite sheet masks to the latest makeup innovations. It\'s the perfect place to discover new brands, swatch products to your heart\'s content, and take advantage of the frequent sales and promotions. Staff are knowledgeable and often multilingual, ready to help you find the perfect products for your skin type and concerns.',
+      ch: '走进明洞的Olive Young旗舰店，你会发现自己置身于一个充满无限美丽可能性的世界。这家店分布在多个楼层，备有各种K-beauty产品，从热门的面膜到最新的彩妆创新。这里是发现新品牌、尽情试用产品以及利用频繁的促销活动的理想之地。员工知识渊博，通常会说多种语言，随时准备帮助您找到适合您肤质和需求的完美产品。',
+      jp: '明洞のオリーブヤング旗艦店に足を踏み入れると、無限の美の可能性の世界が広がっています。複数のフロアにまたがるこの店には、カルト的な人気のシートマスクから最新のメイクアップイノベーションまで、幅広いKビューティー製品が揃っています。新しいブランドを発見し、心ゆくまで製品を試し、頻繁に行われるセールやプロモーションを利用するのに最適な場所です。スタッフは知識が豊富で、多言語に対応していることが多く、あなたの肌のタイプや悩みにぴったりの製品を見つける手助けをしてくれます。',
+      tw: '走進明洞的Olive Young旗艦店，你會發現自己置身於一個充滿無限美麗可能性的世界。這家店分佈在多個樓層，備有各種K-beauty產品，從熱門的面膜到最新的彩妝創新。這裡是發現新品牌、盡情試用產品以及利用頻繁的促銷活動的理想之地。員工知識淵博，通常會說多種語言，隨時準備幫助您找到適合您膚質和需求的完美產品。',
+    },
+    image: { url: locSpotlight2Image.imageUrl, hint: locSpotlight2Image.imageHint },
+    createdAt: new Timestamp(Math.floor(new Date('2024-07-22T14:00:00Z').getTime() / 1000), 0),
+  },
+  {
+    id: 'post-3',
+    category: 'Location Spotlight',
+    locationId: 'loc-3',
+    title: {
+      en: 'Music Korea: Your One-Stop Shop for K-Pop Albums',
+      ch: 'Music Korea：您的一站式K-Pop专辑商店',
+      jp: 'ミュージックコリア：K-POPアルバムのワンストップショップ',
+      tw: 'Music Korea：您的一站式K-Pop專輯商店',
+    },
+    excerpt: {
+      en: 'Located in Myeongdong, Music Korea is a heaven for K-Pop fans looking to get their hands on the latest albums and official merchandise.',
+      ch: '位于明洞的Music Korea是K-Pop粉丝的天堂，他们希望购买最新的专辑和官方商品。',
+      jp: '明洞に位置するミュージックコリアは、最新のアルバムや公式グッズを手に入れたいK-POPファンにとって天国です。',
+      tw: '位於明洞的Music Korea是K-Pop粉絲的天堂，他們希望購買最新的專輯和官方商品。',
+    },
+    content: {
+      en: 'If you\'re looking to expand your K-Pop collection, Music Korea is an essential stop. This store is renowned for its vast selection of albums, from major artists to rookie groups. You can often find pre-order benefits and store-exclusive photocards here. Beyond albums, they offer a wide range of official merchandise, including light sticks, apparel, and collectibles. The vibrant atmosphere, with music videos playing on large screens, makes shopping here an exciting experience for any fan.',
+      ch: '如果您想扩大您的K-Pop收藏，Music Korea是必不可少的一站。这家店以其丰富的专辑选择而闻名，从主要艺术家到新人团体应有尽有。您经常可以在这里找到预购特典和店家专属小卡。除了专辑，他们还提供各种官方商品，包括应援棒、服装和收藏品。充满活力的氛围，大屏幕上播放着音乐视频，使在这里购物成为任何粉丝的激动人心的体验。',
+      jp: 'K-POPコレクションを広げたいなら、ミュージックコリアは欠かせない立ち寄り先です。この店は、メジャーなアーティストから新人グループまで、膨大なアルバムの品揃えで有名です。ここでは、予約特典や店舗限定のフォトカードを見つけることができることがよくあります。アルバム以外にも、ライトスティック、アパレル、コレクターズアイテムなど、幅広い公式グッズを提供しています。大画面でミュージックビデオが流れる活気ある雰囲気は、ここでのショッピングをどんなファンにとってもエキサイティングな体験にします。',
+      tw: '如果您想擴大您的K-Pop收藏，Music Korea是必不可少的一站。這家店以其豐富的專輯選擇而聞名，從主要藝術家到新人團體應有尽有。您經常可以在這裡找到預購特典和店家專屬小卡。除了專輯，他們還提供各種官方商品，包括應援棒、服裝和收藏品。充滿活力的氛圍，大屏幕上播放著音樂視頻，使在這裡購物成為任何粉絲的激動人心的體驗。',
+    },
+    image: { url: locSpotlight3Image.imageUrl, hint: locSpotlight3Image.imageHint },
+    createdAt: new Timestamp(Math.floor(new Date('2024-07-21T11:00:00Z').getTime() / 1000), 0),
+  },
+  {
+    id: 'post-4',
+    category: 'Location Spotlight',
+    locationId: 'loc-4',
+    title: {
+      en: 'Café Onion Anguk: Where Tradition Meets Trend',
+      ch: 'Café Onion 安国：传统与潮流的交汇处',
+      jp: 'カフェオニオン安国：伝統とトレンドが出会う場所',
+      tw: 'Café Onion 安國：傳統與潮流的交匯處',
+    },
+    excerpt: {
+      en: 'Enjoy artisanal coffee and delicious pastries in a beautifully preserved Hanok (traditional Korean house) at one of Seoul\'s most Instagrammable cafes.',
+      ch: '在首尔最适合拍照的咖啡馆之一，于一座保存完好的韩屋（传统韩国房屋）中享用手工咖啡和美味糕点。',
+      jp: 'ソウルで最もインスタ映えするカフェの一つで、美しく保存された韓屋（伝統的な韓国の家）で職人技のコーヒーとおいしいペストリーをお楽しみください。',
+      tw: '在首爾最適合拍照的咖啡館之一，於一座保存完好的韓屋（傳統韓國房屋）中享用手工咖啡和美味糕點。',
+    },
+    content: {
+      en: 'Café Onion in Anguk is a stunning example of old-meets-new. Set within a traditional Hanok, the cafe retains its historic architectural charm while offering a modern, trendy menu. It is famous for its unique pastries, especially the Pandoro, a mountain of powdered sugar-dusted bread. The atmosphere is serene and beautiful, with both floor seating in traditional rooms and table seating in a courtyard. It\'s a perfect spot to relax after exploring the nearby Gyeongbokgung Palace and Bukchon Hanok Village.',
+      ch: '安国的Café Onion是新旧结合的绝佳典范。咖啡馆坐落在一座传统的韩屋中，保留了其历史建筑魅力，同时提供现代时尚的菜单。它以其独特的糕点而闻名，尤其是Pandoro，一种撒满糖粉的面包山。这里的气氛宁静而美丽，既有传统房间的席地座位，也有庭院里的桌席。在探索附近的景福宫和北村韩屋村后，这里是放松的理想场所。',
+      jp: '安国のカフェオニオンは、古さと新しさが融合した見事な例です。伝統的な韓屋の中にあり、カフェは歴史的な建築の魅力を保ちながら、モダンでトレンディなメニューを提供しています。特に、パンドーロという、粉砂糖がたっぷりかかったパンの山が有名です。雰囲気は静かで美しく、伝統的な部屋の床座と中庭のテーブル席の両方があります。近くの景福宮や北村韓屋村を散策した後にリラックスするのに最適な場所です。',
+      tw: '安國的Café Onion是新舊結合的絕佳典範。咖啡館坐落在一座傳統的韓屋中，保留了其歷史建築魅力，同時提供現代時尚的菜單。它以其獨特的糕點而聞名，尤其是Pandoro，一種撒滿糖粉的麵包山。這裡的氣氛寧靜而美麗，既有傳統房間的席地座位，也有庭院裡的桌席。在探索附近的景福宮和北村韓屋村後，這裡是放鬆的理想場所。',
+    },
+    image: { url: locSpotlight4Image.imageUrl, hint: locSpotlight4Image.imageHint },
+    createdAt: new Timestamp(Math.floor(new Date('2024-07-20T16:00:00Z').getTime() / 1000), 0),
+  },
+  {
+    id: 'post-5',
+    category: 'Location Spotlight',
+    locationId: 'loc-5',
+    title: {
+      en: 'Banobagi Dermatology: Trusted Skincare in Gangnam',
+      ch: 'Banobagi皮肤科：江南值得信赖的护肤选择',
+      jp: 'バノバギ皮膚科：江南で信頼されるスキンケア',
+      tw: 'Banobagi皮膚科：江南值得信賴的護膚選擇',
+    },
+    excerpt: {
+      en: 'Known for its appearance on the popular show "Let Me In," Banobagi is a leading dermatology and plastic surgery clinic in Seoul.',
+      ch: '以在热门节目《Let Me In》中亮相而闻名，Banobagi是首尔领先的皮肤科和整形外科诊所。',
+      jp: '人気番組「レットミーイン」への出演で知られるバノバギは、ソウルを代表する皮膚科および形成外科クリニックです。',
+      tw: '以在熱門節目《Let Me In》中亮相而聞名，Banobagi是首爾領先的皮膚科和整形外科診所。',
+    },
+    content: {
+      en: 'Located in the upscale Gangnam district, Banobagi is a household name in Korean skincare and cosmetic procedures. The clinic offers a wide range of non-invasive and invasive treatments, from facials and laser treatments to more complex surgeries. They are known for their state-of-the-art technology, experienced doctors, and personalized approach to patient care. Many international visitors come here for consultations and treatments, thanks to their reputation for quality and their dedicated services for foreign clients, including translators.',
+      ch: 'Banobagi位于高档的江南区，是韩国家喻户晓的护肤和美容手术品牌。该诊所提供从面部护理和激光治疗到更复杂手术的各种非侵入性和侵入性治疗。他们以其最先进的技术、经验丰富的医生和个性化的患者护理方法而闻名。许多国际游客因其优质的声誉和为外国客户提供的包括翻译在内的专业服务而前来咨询和治疗。',
+      jp: '高級な江南地区に位置するバノバギは、韓国のスキンケアと美容整形の分野で有名な名前です。クリニックでは、フェイシャルやレーザー治療からより複雑な手術まで、幅広い非侵襲的および侵襲的治療を提供しています。彼らは、最先端の技術、経験豊富な医師、そして患者ケアへの個別化されたアプローチで知られています。質の高い評判と、翻訳者を含む外国人クライアントへの献身的なサービスのおかげで、多くの海外からの訪問者が相談や治療のためにここを訪れます。',
+      tw: 'Banobagi位於高檔的江南區，是韓國家喻戶曉的護膚和美容手術品牌。該診所提供從面部護理和激光治療到更複雜手術的各種非侵入性和侵入性治療。他們以其最先進的技術、經驗豐富的醫生和個性化的患者護理方法而聞名。許多國際遊客因其優質的聲譽和為外國客戶提供的包括翻譯在內的專業服務而前來諮詢和治療。',
+    },
+    image: { url: locSpotlight5Image.imageUrl, hint: locSpotlight5Image.imageHint },
+    createdAt: new Timestamp(Math.floor(new Date('2024-07-19T13:00:00Z').getTime() / 1000), 0),
+  }
 ];
