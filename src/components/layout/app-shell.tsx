@@ -26,7 +26,7 @@ import { Logo } from '@/components/icons/logo';
 import { LanguageSwitcher } from './language-switcher';
 import { UserNav } from '@/components/auth/user-nav';
 import { useUser } from '@/firebase';
-import { Suspense, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const navItems: NavItem[] = [
@@ -162,6 +162,12 @@ function MobileNav() {
 
 function Header() {
   const user = useUser();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
       <MobileNav />
@@ -169,18 +175,25 @@ function Header() {
         {/* Can add breadcrumbs or search here */}
       </div>
       <div className="flex items-center gap-4">
-        {user && (
-          <Button asChild size="sm">
-            <Link href="/create-post">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Create Post
-            </Link>
-          </Button>
+        {isClient ? (
+          <>
+            {user && (
+              <Button asChild size="sm">
+                <Link href="/create-post">
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Create Post
+                </Link>
+              </Button>
+            )}
+            <LanguageSwitcher />
+            <UserNav />
+          </>
+        ) : (
+          <>
+            <Skeleton className="h-10 w-10" />
+            <Skeleton className="h-10 w-20" />
+          </>
         )}
-        <Suspense fallback={<Skeleton className="h-10 w-10" />}>
-          <LanguageSwitcher />
-        </Suspense>
-        <UserNav />
       </div>
     </header>
   );
