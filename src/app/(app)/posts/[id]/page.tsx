@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useParams } from 'next/navigation';
 import { doc, Timestamp } from 'firebase/firestore';
 import { useDoc, useFirestore } from '@/firebase';
 import { getLocationById } from '@/lib/data';
@@ -15,12 +15,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { CommentsSection } from '@/components/comments/comments-section';
 import { seedArticles } from '@/lib/articles-seed-data';
 
-type Props = {
-  params: { id: string };
-};
-
-export default function PostPage({ params }: Props) {
-  const articleId = params.id;
+export default function PostPage() {
+  const params = useParams();
+  const articleId = params.id as string;
   const firestore = useFirestore();
   const searchParams = useSearchParams();
   const lang = (searchParams.get('lang') as Language) || 'en';
