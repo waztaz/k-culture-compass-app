@@ -17,13 +17,15 @@ export function CommentsSection({ articleId }: { articleId: string }) {
     if (!firestore) return null;
     return query(
       collection(firestore, 'articles', articleId, 'comments'),
-      orderBy('createdAt', 'desc')
+      orderBy('createdAt', 'asc')
     );
   }, [firestore, articleId]);
 
   const { data: comments, loading } = useCollection<Comment>(commentsQuery, {
     deps: [firestore, articleId],
   });
+
+  const reversedComments = useMemo(() => (comments ? [...comments].reverse() : []), [comments]);
 
   return (
     <div className="space-y-8">
@@ -41,8 +43,8 @@ export function CommentsSection({ articleId }: { articleId: string }) {
           <Skeleton className="h-24 w-full" />
         </div>
       )}
-      {!loading && comments && (
-        <CommentList comments={comments} />
+      {!loading && (
+        <CommentList comments={reversedComments} />
       )}
     </div>
   );

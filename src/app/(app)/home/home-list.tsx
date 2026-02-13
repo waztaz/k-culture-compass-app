@@ -18,7 +18,7 @@ export default function HomeList() {
     if (!firestore) return null;
     return query(
       collection(firestore, 'articles'),
-      orderBy('createdAt', 'desc'),
+      orderBy('createdAt', 'asc'),
       limit(6)
     );
   }, [firestore]);
@@ -29,7 +29,7 @@ export default function HomeList() {
 
   const articles = useMemo(() => {
     if (allArticlesFromDb && allArticlesFromDb.length > 0) {
-      return allArticlesFromDb;
+      return [...allArticlesFromDb].reverse();
     }
     if (!loading && (!allArticlesFromDb || allArticlesFromDb.length === 0)) {
         return seedArticles.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds).slice(0, 6);

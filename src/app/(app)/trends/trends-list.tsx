@@ -18,7 +18,7 @@ export default function TrendsList() {
     if (!firestore) return null;
     return query(
       collection(firestore, 'articles'),
-      orderBy('createdAt', 'desc')
+      orderBy('createdAt', 'asc')
     );
   }, [firestore]);
 
@@ -28,10 +28,10 @@ export default function TrendsList() {
 
   const allArticles = useMemo(() => {
     if (allArticlesFromDb && allArticlesFromDb.length > 0) {
-      return allArticlesFromDb;
+      return [...allArticlesFromDb].reverse();
     }
     if (!loading && (!allArticlesFromDb || allArticlesFromDb.length === 0)) {
-        return seedArticles;
+        return seedArticles.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
     }
     return [];
   }, [allArticlesFromDb, loading]);

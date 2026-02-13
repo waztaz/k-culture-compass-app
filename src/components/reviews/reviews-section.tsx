@@ -18,17 +18,19 @@ export function ReviewsSection({ locationId }: { locationId: string }) {
     return query(
       collection(firestore, 'reviews'),
       where('locationId', '==', locationId),
-      orderBy('createdAt', 'desc')
+      orderBy('createdAt', 'asc')
     );
   }, [firestore, locationId]);
 
   const { data: reviews, loading } = useCollection<Review>(reviewsQuery, { deps: [firestore, locationId] });
+  
+  const reversedReviews = useMemo(() => (reviews ? [...reviews].reverse() : []), [reviews]);
 
   return (
     <div className="space-y-8">
       <h2 className="text-2xl font-headline font-bold">Reviews ({!loading && reviews ? reviews.length : 0})</h2>
       
-      {!loading && reviews && <ReviewsSummary locationId={locationId} reviews={reviews} />}
+      {!loading && <ReviewsSummary locationId={locationId} reviews={reversedReviews} />}
 
       <Separator />
 
@@ -38,7 +40,7 @@ export function ReviewsSection({ locationId }: { locationId: string }) {
               <Skeleton className="h-24 w-full" />
           </div>
       )}
-      {!loading && reviews && <ReviewList reviews={reviews} />}
+      {!loading && <ReviewList reviews={reversedReviews} />}
 
       <Separator />
 

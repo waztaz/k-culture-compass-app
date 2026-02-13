@@ -14,13 +14,15 @@ export default function CommunityPage() {
     if (!firestore) return null;
     return query(
       collection(firestore, 'user-posts'),
-      orderBy('createdAt', 'desc')
+      orderBy('createdAt', 'asc')
     );
   }, [firestore]);
 
   const { data: posts, loading } = useCollection<UserPost>(postsQuery, {
     deps: [firestore],
   });
+
+  const reversedPosts = useMemo(() => (posts ? [...posts].reverse() : []), [posts]);
 
   return (
     <div>
@@ -40,10 +42,9 @@ export default function CommunityPage() {
       )}
 
       {!loading &&
-        posts &&
-        (posts.length > 0 ? (
+        (reversedPosts.length > 0 ? (
           <div className="space-y-6">
-            {posts.map((post) => (
+            {reversedPosts.map((post) => (
               <UserPostCard key={post.id} post={post} />
             ))}
           </div>
