@@ -5,3 +5,11 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+  # Add environment variables and secrets here.
+  # Secrets are stored in Google Cloud Secret Manager.
+  # https://firebase.google.com/docs/app-hosting/configure#secrets
+  secrets:
+    - secret: GOOGLE_MAPS_API_KEY
+      environmentVariable: NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+    - secret: GEMINI_API_KEY
+      environmentVariable: GEMINI_API_KEY
