@@ -1,9 +1,16 @@
 export type LocationCategory =
+  | 'K-pop Holy Sites'
+  | 'Tourist Place'
+  | 'Dermatology'
   | 'Pharmacy'
-  | 'K-Pop Holy Lands'
-  | 'K-Pop Haul'
-  | 'Food/Cafe'
-  | 'Dermatology';
+  | 'Olive Young'
+  | 'K-pop Goods'
+  | 'Photo Booth'
+  | 'Restaurant'
+  | 'Cafe'
+  | 'Hair Salon'
+  | 'Dance Studio'
+  | 'General Clinic';
 
 export interface CosmeticPrice {
   item: string;
@@ -19,7 +26,14 @@ export interface Location {
     lng: number;
   };
   address: string;
+  hours?: string;
+  tags?: string[];
   postId?: string;
+  actionLinks?: {
+    title: string;
+    url: string;
+    type: 'call' | 'website' | 'reservation' | 'partner';
+  }[];
   cosmeticPrices?: CosmeticPrice[];
   image: {
     url: string;
@@ -27,23 +41,32 @@ export interface Location {
   };
 }
 
-export type PostCategory = 'K-Pop News' | 'K-Beauty Trend' | 'Location Spotlight';
+export type PostCategory = 'K-Pop News' | 'K-Life' | 'Guide' | 'Itinerary' | 'K-Beauty Trend' | 'Location Spotlight';
 
-export type Language = 'en' | 'ch' | 'jp' | 'tw';
+export type Language = 'kr' | 'en' | 'ch' | 'jp' | 'tw';
 
 export interface TranslatedContent {
+  kr?: string;
   en: string;
   ch: string;
   jp: string;
-  tw: string;
+  tw?: string;
 }
 
 export interface Post {
   id: string;
-  title: TranslatedContent;
-  content: TranslatedContent;
-  excerpt: TranslatedContent;
+  title: string | TranslatedContent;
+  content: string | TranslatedContent;
+  summary?: string | TranslatedContent;
+  excerpt?: string | TranslatedContent;
   category: PostCategory;
+  tags?: string[];
+  mapLocations?: string[];
+  partnerLinks?: {
+    title: string;
+    url: string;
+    type: 'booking' | 'promo' | 'other';
+  }[];
   locationId?: string;
   createdAt: string;
   image: {

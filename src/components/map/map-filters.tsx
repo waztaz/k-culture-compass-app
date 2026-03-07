@@ -1,15 +1,22 @@
 'use client';
 
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { LocationCategory } from '@/lib/types';
 import {
+  Activity,
+  Camera,
+  Coffee,
   HeartPulse,
   Landmark,
+  Map,
+  Music,
+  Scissors,
   ShoppingBag,
-  Coffee,
   Sparkles,
+  Stethoscope,
+  Utensils,
 } from 'lucide-react';
 import React from 'react';
 
@@ -17,11 +24,18 @@ const categoryDetails: Record<
   LocationCategory,
   { icon: React.ElementType; color: string }
 > = {
-  'Pharmacy': { icon: HeartPulse, color: 'text-red-500' },
-  'K-Pop Holy Lands': { icon: Landmark, color: 'text-blue-500' },
-  'K-Pop Haul': { icon: ShoppingBag, color: 'text-green-500' },
-  'Food/Cafe': { icon: Coffee, color: 'text-yellow-500' },
+  'K-pop Holy Sites': { icon: Landmark, color: 'text-blue-500' },
+  'Tourist Place': { icon: Map, color: 'text-blue-500' },
   'Dermatology': { icon: Sparkles, color: 'text-purple-500' },
+  'Pharmacy': { icon: HeartPulse, color: 'text-red-500' },
+  'Olive Young': { icon: ShoppingBag, color: 'text-green-500' },
+  'K-pop Goods': { icon: Music, color: 'text-pink-500' },
+  'Photo Booth': { icon: Camera, color: 'text-purple-500' },
+  'Restaurant': { icon: Utensils, color: 'text-orange-500' },
+  'Cafe': { icon: Coffee, color: 'text-yellow-500' },
+  'Hair Salon': { icon: Scissors, color: 'text-pink-500' },
+  'Dance Studio': { icon: Activity, color: 'text-teal-500' },
+  'General Clinic': { icon: Stethoscope, color: 'text-cyan-500' },
 };
 
 interface MapFiltersProps {

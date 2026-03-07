@@ -24,6 +24,11 @@ service cloud.firestore {
       allow update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
     }
 
+    match /locations/{locationId} {
+      allow read: if true;
+      allow write: if false; 
+    }
+
     match /articles/{articleId} {
       allow read: if true;
       allow write: if false; // Writes are disabled now that seeding is complete.

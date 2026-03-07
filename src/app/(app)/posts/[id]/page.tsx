@@ -1,18 +1,30 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams, useParams } from 'next/navigation';
-import { doc } from 'firebase/firestore';
+import { CommentsSection } from '@/components/comments/comments-section';
+import { ReviewsSection } from '@/components/reviews/reviews-section';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useDoc, useFirestore } from '@/firebase';
 import { getLocationById } from '@/lib/data';
-import Image from 'next/image';
-import { Badge } from '@/components/ui/badge';
+import { getTrackedUrl, trackExternalClick } from '@/lib/tracking';
+import type { Article, Language, Location } from '@/lib/types';
+import { doc } from 'firebase/firestore';
 import { MapPin } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
-import { ReviewsSection } from '@/components/reviews/reviews-section';
-import type { Language, Article, Location } from '@/lib/types';
-import { Skeleton } from '@/components/ui/skeleton';
-import { CommentsSection } from '@/components/comments/comments-section';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+
+function getTranslated(
+  field: string | { kr?: string; en?: string; ch?: string; jp?: string; tw?: string } | undefined,
+  lang: string
+): string {
+  if (!field) return '';
+  if (typeof field === 'string') return field;
+  return (field as any)[lang] || field.en || '';
+}
 
 export default function PostPage() {
   const params = useParams();
@@ -24,19 +36,17 @@ export default function PostPage() {
 
   const articleRef = useMemo(() => {
     if (!firestore || !articleId) return null;
-    return doc(firestore, 'articles', articleId);
+    return doc(firestore, 'articles', articleId) as import('firebase/firestore').DocumentReference<Article>;
   }, [firestore, articleId]);
 
   const { data: article, loading } = useDoc<Article>(articleRef, {
     deps: [firestore, articleId],
   });
-  
+
 
   useEffect(() => {
     if (article) {
-      document.title = `${
-        article.title[lang] || article.title.en
-      } | K-Culture Compass`;
+      document.title = `${getTranslated(article.title, lang)} | K-Culture Compass`;
       if (article.locationId) {
         getLocationById(article.locationId).then(setLocation);
       }
@@ -70,8 +80,8 @@ export default function PostPage() {
     );
   }
 
-  const postTitle = article.title[lang] || article.title.en;
-  const postContent = article.content[lang] || article.content.en;
+  const postTitle = getTranslated(article.title, lang);
+  const postContent = getTranslated(article.content, lang);
   const postDate = article.createdAt.toDate();
 
   return (
@@ -80,7 +90,7 @@ export default function PostPage() {
         <div className="space-y-4">
           {location && (
             <div className="flex items-center gap-4">
-              <Badge variant="secondary">{location.category}</Badge>
+              <Badge className="bg-secondary text-secondary-foreground hover:bg-secondary/80">{location.category}</Badge>
               <div className="flex items-center text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 mr-1.5" />
                 <span>{location.name}</span>
@@ -114,6 +124,39 @@ export default function PostPage() {
         <p className="text-foreground/90 leading-loose whitespace-pre-wrap">
           {postContent}
         </p>
+
+        {article.partnerLinks && article.partnerLinks.length > 0 && (
+          <div className="mb-8">
+            <h3 className="font-headline font-bold text-xl mb-4">Partner Offers</h3>
+            <div className="flex flex-col gap-3">
+              {article.partnerLinks.map((link, idx) => (
+                <Button
+                  key={idx}
+                  asChild
+                  className="bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 justify-between items-center py-6"
+                >
+                  <a
+                    href={getTrackedUrl(link.url, 'post', 'partner_offers')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackExternalClick(link.url)}
+                  >
+                    <span className="font-semibold">{link.title}</span>
+                    <span className="text-xl">✨</span>
+                  </a>
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {article.mapLocations && article.mapLocations.length > 0 && (
+          <div className="mb-8">
+            <Button asChild className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-6">
+              <Link href="/map">Open Locations in Map</Link>
+            </Button>
+          </div>
+        )}
 
         <Separator className="my-12" />
         <CommentsSection articleId={articleId} />

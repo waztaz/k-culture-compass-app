@@ -1,18 +1,25 @@
 'use client';
 
-import { Map, AdvancedMarker } from '@vis.gl/react-google-maps';
-import { useEffect, useState, useCallback } from 'react';
 import { getLocations } from '@/lib/data';
 import type { Location, LocationCategory } from '@/lib/types';
-import { MapFilters } from './map-filters';
+import { AdvancedMarker, Map } from '@vis.gl/react-google-maps';
+import { useCallback, useEffect, useState } from 'react';
 import { LocationInfoDialog } from './location-info-dialog';
+import { MapFilters } from './map-filters';
 
 const allCategories: LocationCategory[] = [
-  'Pharmacy',
-  'K-Pop Holy Lands',
-  'K-Pop Haul',
-  'Food/Cafe',
+  'K-pop Holy Sites',
+  'Tourist Place',
   'Dermatology',
+  'Pharmacy',
+  'Olive Young',
+  'K-pop Goods',
+  'Photo Booth',
+  'Restaurant',
+  'Cafe',
+  'Hair Salon',
+  'Dance Studio',
+  'General Clinic',
 ];
 
 export function MapView() {
@@ -50,7 +57,7 @@ export function MapView() {
     setSelectedLocation(location);
     setIsDialogOpen(true);
   };
-  
+
   return (
     <div className="w-full h-[calc(100vh-112px)] relative">
       <Map
@@ -67,7 +74,7 @@ export function MapView() {
             position={location.coordinates}
             onClick={() => handleMarkerClick(location)}
           >
-             <div className="w-6 h-6 bg-primary rounded-full border-2 border-primary-foreground shadow-md animate-pulse"></div>
+            <div className="w-6 h-6 bg-primary rounded-full border-2 border-primary-foreground shadow-md animate-pulse"></div>
           </AdvancedMarker>
         ))}
       </Map>
@@ -75,7 +82,7 @@ export function MapView() {
         selectedCategories={selectedCategories}
         onCategoryChange={handleCategoryChange}
       />
-      <LocationInfoDialog 
+      <LocationInfoDialog
         location={selectedLocation}
         isOpen={isDialogOpen}
         onOpenChange={setIsDialogOpen}

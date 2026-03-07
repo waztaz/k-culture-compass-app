@@ -1,13 +1,14 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { getTrackedUrl, trackExternalClick } from '@/lib/tracking';
 import type { Location } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -44,8 +45,8 @@ export function LocationInfoDialog({
               data-ai-hint={location.image.hint}
             />
           </div>
-          <Badge variant="secondary" className="w-fit">{location.category}</Badge>
-          
+          <Badge className="w-fit bg-secondary text-secondary-foreground hover:bg-secondary/80">{location.category}</Badge>
+
           {location.cosmeticPrices && location.cosmeticPrices.length > 0 && (
             <div>
               <h4 className="font-semibold mb-2">Cosmetic Prices</h4>
@@ -69,9 +70,30 @@ export function LocationInfoDialog({
           )}
 
           {location.postId && (
-            <Button asChild className="mt-4 bg-primary hover:bg-primary/90">
-              <Link href={`/posts/${location.postId}`}>View Details & Reviews</Link>
+            <Button asChild className="mt-4 w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
+              <Link href={`/posts/${location.postId}`}>View Post / Guide</Link>
             </Button>
+          )}
+
+          {location.actionLinks && location.actionLinks.length > 0 && (
+            <div className="flex flex-col gap-2 mt-2">
+              {location.actionLinks.map((link, index) => (
+                <Button
+                  key={index}
+                  asChild
+                  className="w-full justify-center border bg-transparent hover:bg-muted"
+                >
+                  <a
+                    href={getTrackedUrl(link.url, 'map_pin', 'location_info_dialog')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackExternalClick(link.url)}
+                  >
+                    {link.title} {link.type === 'partner' ? '✨' : ''}
+                  </a>
+                </Button>
+              ))}
+            </div>
           )}
         </div>
       </DialogContent>
