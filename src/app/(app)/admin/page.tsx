@@ -4,14 +4,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAuth, useFirestore, useUser } from '@/firebase';
+import { useDoc, useFirestore, useStorage, useUser } from '@/firebase';
 import { collection, deleteDoc, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useEffect, useState } from 'react';
 
 export default function AdminDashboard() {
-    const { user, loading: authLoading } = useAuth();
-    const { data: userData, loading: userLoading } = useUser(user?.uid || '');
+    const user = useUser();
     const firestore = useFirestore();
+    const storage = useStorage();
+    const { data: userData, loading: userLoading } = useDoc(user?.uid ? doc(firestore, 'users', user.uid) : null);
 
     const [isAdmin, setIsAdmin] = useState(false);
 
@@ -23,6 +25,16 @@ export default function AdminDashboard() {
     // Form state example for quickly adding a location
     const [newLocName, setNewLocName] = useState('');
     const [newLocCategory, setNewLocCategory] = useState('Food/Cafe');
+    const [newLocImageUrl, setNewLocImageUrl] = useState('');
+    const [locImageFile, setLocImageFile] = useState<File | null>(null);
+
+    // Form state for quickly adding an article
+    const [newArtTitle, setNewArtTitle] = useState('');
+    const [newArtCategory, setNewArtCategory] = useState('News');
+    const [newArtImageUrl, setNewArtImageUrl] = useState('');
+    const [artImageFile, setArtImageFile] = useState<File | null>(null);
+
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         if (userData?.role === 'admin') {
@@ -71,26 +83,73 @@ export default function AdminDashboard() {
 
     const handleAddLocation = async () => {
         if (!newLocName) return;
+        setUploading(true);
         const newId = 'loc-' + Date.now();
         try {
+            let imageUrl = newLocImageUrl || 'https://via.placeholder.com/400';
+            if (locImageFile) {
+                const storageRef = ref(storage, `locations/${newId}-${locImageFile.name}`);
+                await uploadBytes(storageRef, locImageFile);
+                imageUrl = await getDownloadURL(storageRef);
+            }
+
             await setDoc(doc(firestore, 'locations', newId), {
                 id: newId,
                 name: newLocName,
                 category: newLocCategory,
                 coordinates: { lat: 37.5665, lng: 126.9780 },
                 address: 'New Address, Seoul',
-                image: { url: 'https://via.placeholder.com/400' }
+                image: { url: imageUrl }
             });
             setNewLocName('');
+            setNewLocImageUrl('');
+            setLocImageFile(null);
             fetchData();
             alert('Location added securely!');
         } catch (error: any) {
             alert('Error adding location: ' + error.message);
+        } finally {
+            setUploading(false);
         }
     };
 
 
-    if (authLoading || userLoading) return <div className="p-8">Loading...</div>;
+    const handleAddArticle = async () => {
+        if (!newArtTitle) return;
+        setUploading(true);
+        const newId = 'art-' + Date.now();
+        try {
+            let heroUrl = newArtImageUrl || 'https://via.placeholder.com/800x400';
+            if (artImageFile) {
+                const storageRef = ref(storage, `articles/${newId}-${artImageFile.name}`);
+                await uploadBytes(storageRef, artImageFile);
+                heroUrl = await getDownloadURL(storageRef);
+            }
+
+            await setDoc(doc(firestore, 'articles', newId), {
+                id: newId,
+                title: { en: newArtTitle, ko: newArtTitle, zh: newArtTitle, ja: newArtTitle },
+                category: newArtCategory,
+                content: { en: 'Placeholder content', ko: 'Placeholder content', zh: 'Placeholder content', ja: 'Placeholder content' },
+                imageUrl: heroUrl,
+                author: 'Admin',
+                date: new Date().toISOString().split('T')[0],
+                readTime: '5 min read'
+            });
+            setNewArtTitle('');
+            setNewArtImageUrl('');
+            setArtImageFile(null);
+            fetchData();
+            alert('Article added securely!');
+        } catch (error: any) {
+            alert('Error adding article: ' + error.message);
+        } finally {
+            setUploading(false);
+        }
+    };
+
+
+    if (userLoading) return <div className="p-8">Loading...</div>;
 
     if (!user) {
         return (
@@ -139,24 +198,42 @@ export default function AdminDashboard() {
                         <CardHeader>
                             <CardTitle>Quick Add Location</CardTitle>
                         </CardHeader>
-                        <CardContent className="flex gap-4">
-                            <Input
-                                placeholder="Location Name"
-                                value={newLocName}
-                                onChange={(e) => setNewLocName(e.target.value)}
-                                className="max-w-xs"
-                            />
-                            <select
-                                className="border rounded-md px-3"
-                                value={newLocCategory}
-                                onChange={(e) => setNewLocCategory(e.target.value)}
-                            >
-                                <option>Food/Cafe</option>
-                                <option>Dermatology</option>
-                                <option>Pharmacy</option>
-                                <option>K-Pop Holy Sites</option>
-                            </select>
-                            <Button onClick={handleAddLocation}>Create Location</Button>
+                        <CardContent className="flex flex-col gap-4">
+                            <div className="flex gap-4">
+                                <Input
+                                    placeholder="Location Name"
+                                    value={newLocName}
+                                    onChange={(e) => setNewLocName(e.target.value)}
+                                    className="max-w-xs"
+                                />
+                                <select
+                                    className="border rounded-md px-3"
+                                    value={newLocCategory}
+                                    onChange={(e) => setNewLocCategory(e.target.value)}
+                                >
+                                    <option>Food/Cafe</option>
+                                    <option>Dermatology</option>
+                                    <option>Pharmacy</option>
+                                    <option>K-Pop Holy Sites</option>
+                                </select>
+                            </div>
+                            <div className="flex gap-4">
+                                <Input
+                                    placeholder="Or paste Image URL (optional)"
+                                    value={newLocImageUrl}
+                                    onChange={(e) => setNewLocImageUrl(e.target.value)}
+                                    className="flex-1"
+                                />
+                                <Input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => setLocImageFile(e.target.files?.[0] || null)}
+                                    className="flex-1"
+                                />
+                                <Button onClick={handleAddLocation} disabled={uploading}>
+                                    {uploading ? 'Uploading...' : 'Create Location'}
+                                </Button>
+                            </div>
                         </CardContent>
                     </Card>
 
@@ -174,6 +251,49 @@ export default function AdminDashboard() {
                 </TabsContent>
 
                 <TabsContent value="articles">
+                    <Card className="mb-8">
+                        <CardHeader>
+                            <CardTitle>Quick Add Article</CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col gap-4">
+                            <div className="flex gap-4">
+                                <Input
+                                    placeholder="Article Title"
+                                    value={newArtTitle}
+                                    onChange={(e) => setNewArtTitle(e.target.value)}
+                                    className="max-w-xs"
+                                />
+                                <select
+                                    className="border rounded-md px-3"
+                                    value={newArtCategory}
+                                    onChange={(e) => setNewArtCategory(e.target.value)}
+                                >
+                                    <option>News</option>
+                                    <option>Beauty</option>
+                                    <option>Culture</option>
+                                    <option>Guide</option>
+                                </select>
+                            </div>
+                            <div className="flex gap-4">
+                                <Input
+                                    placeholder="Or paste Hero Image URL (optional)"
+                                    value={newArtImageUrl}
+                                    onChange={(e) => setNewArtImageUrl(e.target.value)}
+                                    className="flex-1"
+                                />
+                                <Input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => setArtImageFile(e.target.files?.[0] || null)}
+                                    className="flex-1"
+                                />
+                                <Button onClick={handleAddArticle} disabled={uploading}>
+                                    {uploading ? 'Uploading...' : 'Create Article'}
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+
                     <p className="mb-4 text-muted-foreground">Articles can be managed here using your secure Admin rules.</p>
                     <div className="space-y-4">
                         {articles.map(art => (
