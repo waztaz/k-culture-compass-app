@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { collection, query, orderBy, limit } from 'firebase/firestore';
+import { collection, query } from 'firebase/firestore';
 import { useFirestore, useCollection } from '@/firebase';
 import { PostCard } from '@/components/posts/post-card';
 import { Language, Article } from '@/lib/types';
@@ -15,50 +15,47 @@ export default function HomeList() {
 
   const articlesQuery = useMemo(() => {
     if (!firestore) return null;
-    return query(
-      collection(firestore, 'articles'),
-      orderBy('createdAt', 'asc'),
-      limit(6)
-    );
+    return query(collection(firestore, 'articles'));
   }, [firestore]);
 
   const { data: allArticlesFromDb, loading } = useCollection<Article>(articlesQuery, {
     deps: [firestore],
   });
 
-  const articles = useMemo(() => {
-    if (allArticlesFromDb) {
-      return [...allArticlesFromDb].reverse();
-    }
-    return [];
+  const sortedArticles = useMemo(() => {
+    if (!allArticlesFromDb) return [];
+    return [...allArticlesFromDb]
+      .sort((a, b) => {
+        const timeA = a.createdAt?.toMillis() || 0;
+        const timeB = b.createdAt?.toMillis() || 0;
+        return timeB - timeA;
+      })
+      .slice(0, 6);
   }, [allArticlesFromDb]);
   
   if (loading) {
     return (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Skeleton className="h-80 w-full" />
-            <Skeleton className="h-80 w-full" />
-            <Skeleton className="h-80 w-full" />
-            <Skeleton className="h-80 w-full" />
-            <Skeleton className="h-80 w-full" />
-            <Skeleton className="h-80 w-full" />
+            {[...Array(6)].map((_, i) => (
+              <Skeleton key={i} className="h-80 w-full" />
+            ))}
         </div>
     );
   }
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {articles.map((item) => (
+      {sortedArticles.map((item) => (
         <PostCard
           key={item.id}
           id={item.id}
-          title={item.title[lang] || item.title.en}
-          excerpt={item.excerpt[lang] || item.excerpt.en}
+          title={typeof item.title === 'string' ? item.title : (item.title[lang] || item.title.en)}
+          excerpt={typeof item.excerpt === 'string' ? item.excerpt : (item.excerpt[lang] || item.excerpt.en)}
           image={item.image}
           link={`/posts/${item.id}?lang=${lang}`}
         />
       ))}
-       {articles?.length === 0 && (
+       {sortedArticles?.length === 0 && (
          <p className="text-center text-muted-foreground py-8 col-span-full">No articles found.</p>
       )}
     </div>

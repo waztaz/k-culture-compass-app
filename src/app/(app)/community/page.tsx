@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { collection, query, orderBy } from 'firebase/firestore';
+import { collection, query } from 'firebase/firestore';
 import { useFirestore, useCollection } from '@/firebase';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { UserPost } from '@/lib/types';
@@ -12,17 +12,22 @@ export default function CommunityPage() {
 
   const postsQuery = useMemo(() => {
     if (!firestore) return null;
-    return query(
-      collection(firestore, 'user-posts'),
-      orderBy('createdAt', 'asc')
-    );
+    // Fetch all posts; sorting handled client-side to avoid index permission errors
+    return query(collection(firestore, 'user-posts'));
   }, [firestore]);
 
   const { data: posts, loading } = useCollection<UserPost>(postsQuery, {
     deps: [firestore],
   });
 
-  const reversedPosts = useMemo(() => (posts ? [...posts].reverse() : []), [posts]);
+  const sortedPosts = useMemo(() => {
+    if (!posts) return [];
+    return [...posts].sort((a, b) => {
+      const timeA = a.createdAt?.toMillis() || 0;
+      const timeB = b.createdAt?.toMillis() || 0;
+      return timeB - timeA;
+    });
+  }, [posts]);
 
   return (
     <div>
@@ -42,9 +47,9 @@ export default function CommunityPage() {
       )}
 
       {!loading &&
-        (reversedPosts.length > 0 ? (
+        (sortedPosts.length > 0 ? (
           <div className="space-y-6">
-            {reversedPosts.map((post) => (
+            {sortedPosts.map((post) => (
               <UserPostCard key={post.id} post={post} />
             ))}
           </div>

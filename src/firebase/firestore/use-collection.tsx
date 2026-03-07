@@ -55,8 +55,11 @@ export function useCollection<T>(
         setLoading(false);
       },
       (err: FirestoreError) => {
+        // Safely attempt to extract the path from a CollectionReference or a Query
+        const path = (memoizedQuery as any).path || (memoizedQuery as any)._query?.path?.segments?.join('/') || 'unknown';
+        
         const permissionError = new FirestorePermissionError({
-          path: (memoizedQuery as CollectionReference).path,
+          path,
           operation: 'list',
         });
         errorEmitter.emit('permission-error', permissionError);
